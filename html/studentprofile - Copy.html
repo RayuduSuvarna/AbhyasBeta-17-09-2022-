@@ -1,0 +1,222 @@
+
+
+<div class="content-wrapper" ng-app="AbhyasApp" ng-controller="studentprofile">
+          
+  <form >
+    <div class="row">
+        <div class="col-md-12 mb-2">
+            <div class="d-flex justify-content-between bg-white topSearch">
+              
+                <aside class="flex-grow-1 align-self-center">
+                    <!-- <input type="text" class="w-100 topSearchInput" > -->
+                    <input type="text" id="form1" class="form-control border-0" ng-model="searchkeyword"  autocomplete="off" placeholder="Search Topic Name..."/>
+                </aside>
+                <aside class="align-self-center">
+                    <div class="position-relative">
+                        <button class="btn btn-white" ng-click="searchTopicFromVideo(progid,searchkeyword)"> <i class="fa fa-search fa-lg" style="color: #FD9A10;" aria-hidden="true"></i></button>  
+                       
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+  </form>   
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card stdprofile-card-2 rounded shadow" style="height: 500px;">
+          
+          <div class="card-img-block">
+              
+              <img class="img-responsive" src="assets/images/usercover.jpg" alt="Card image cap">
+              
+          </div>
+          <div class="card-body pt-5 mr-4 ml-5">
+              <div class="col-12 data">
+                  <table class="table table-borderless table-sm w-100 font2 wt1 text-dark">
+                      <tr>
+                          <td class="text-muted">Mobile</td>
+                          <td> {{userdata.stdMobileNo}}</td>
+                      </tr>
+                      <tr>
+                        <td class="text-muted">Email</td>
+                        <td> {{userdata.stdEmail}}</td>
+                    </tr>
+                      <tr>
+                          <td class="text-muted">College</td>
+                          <td>{{userdata.stdCollege}}</td>
+                      </tr>
+                      <tr>
+                          <td class="text-muted">City</td>
+                          <td>{{userdata.stdCity}}</td>
+                      </tr>
+                      <tr>
+                          <td class="text-muted">
+                              Enrolled in
+                          </td>
+                          <td>
+                              <span class="course btn btn-outline-dark btn-sm rounded">
+                                <img src="assets/images/cbse.png" style="width: 15px;margin-top: -5px;"> {{studentcourse}}</span>
+                          </td>
+                      </tr>
+                  </table>
+              </div>
+              
+              <img src="assets/images/undraw_male_avatar_323b.svg" alt="profile-image" class="profile"/><br>
+              
+              <div class="card-title font4 wt1 text-dark" style="margin-top: 70px !important;"> {{userdata.stdName}} 
+              </div>
+              <div class="card-title font3 wt1 text-muted" style="margin-top: 115px !important;"></div>
+             
+              
+          </div>
+        
+          <div class="card-footer text-center bg-white">
+              <div class="row">
+                  <div class="col-md-12">
+                      <div class="icon-block">
+                          <a href="#"><i class="fa fa-facebook"></i></a>
+                          <a href="#"><i class="fa fa-twitter"></i></a>
+                         
+                        </div>
+                  </div>
+              </div>
+              </div>
+      </div>
+     
+
+    </div>
+  </div>
+  <div class="row">
+      <!-- Second Form  -->
+      <div class="col-md-6 mt-2">
+        <div class="card">
+          <div class="card-body">
+            
+              <form class="profileform">
+                    <h2 class="modal-title">USER PROFILE </h2>
+                    <h5 class="text-secondary"> Personal Details </h5>
+                    <label> </label>
+                <div class="form-group">
+                    <input type="text" id="stdName"  ng-model="userdata.stdName" class="form-control " required autocomplete="off">
+                    <label for="stdName"> Name </label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="stdMobileNo"  ng-model="userdata.stdMobileNo" class="form-control " required autocomplete="off">
+                    <label for="stdMobileNo"> Mobile Number </label>
+                    
+                   
+                </div>
+                <div class="form-group"> 
+                    <label class="mt-3"> Are You ADITYA College Student? </label>
+                    <div class="form-check"  style="margin-top: -35px; margin-left: 15px;">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="yes" ng-model="stdchoice" ng-click="radioaditya()">
+                        <label class="form-check-label" for="exampleRadios1"> <strong>  Yes </strong>  </label> &nbsp; &nbsp; &nbsp;&nbsp;
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="no" ng-model="stdchoice" ng-click="radioother()">
+                        <label class="form-check-label" for="exampleRadios2"> <strong> No </strong>  </label>
+                      </div>
+                      
+                </div><br>
+
+                <div ng-show="showdiv==1">
+                    <div class="row">
+                       <div class="col-md-10"> 
+                           <div class="form-group">
+                            <input type="text" id="stdSuc" ng-model="stdSuc" class="form-control " required autocomplete="off">
+                            <label for="stdSuc"> Student SUC Code </label>
+                            <p class="text-danger text-center"> {{error}} </p>
+                           </div>
+                       </div>
+                       <div class="col-md-2">
+                            <button class="btn btn-sm" ng-click="getsuc(stdSuc,stdchoice)" style="background-color: #FD9A10; color:white"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                       </div>
+                    </div>
+                </div>
+
+                <div ng-show="showdiv==2">
+                    <div class="form-group">
+                        <select id="stdGender" ng-init="stdGender==''" ng-model="userdata.stdGender" style="font-family:Roboto" class="form-control pt-2 pb-0">
+                            <option value=""> Gender </option>
+                            <option value="male"> Male </option>
+                            <option value="female">Female</option>
+                            <option value="notknown">Prefer Not To Say</option>
+                        </select>
+                        <label> Select Gender</label>
+                    </div>
+                    <div class="form-group">
+                    <input type="text" id="parentMobile"  ng-model="userdata.parentMobile" class="form-control " required autocomplete="off">
+                    <label for="parentMobile"> Parent Mobile Number </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="parentName"  ng-model="userdata.parentName" class="form-control " required autocomplete="off">
+                        <label for="parentName"> Parent Name </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="stdEmail" ng-model="userdata.stdEmail" class="form-control " required autocomplete="off">
+                        <label for="stdEmail">  Email id </label>
+                    </div>
+                        <h5 class="text-secondary"> Education Details </h5>
+                        <label> </label>
+                        <div class="form-group">
+                            <select id="stdClass" ng-init="stdClass==''" ng-model="userdata.stdClass" style="font-family:Roboto" class="form-control pt-2 pb-0">
+                                <option value=""> Select Class </option>
+                            <option value="11"> 11 </option>
+                            <option value="12">12</option>
+                            
+                            </select>
+                            <label for="stdClass"> Class</label>
+                            <label> </label>
+                        </div>
+                        <div class="form-group">
+                            <select id="stdBoard" ng-init="stdBoard==''" ng-model="userdata.stdBoard" style="font-family:Roboto" class="form-control pt-2 pb-0">
+                                <option value=""> Select </option>
+                            <option value="SSC"> SSC </option>
+                            <option value="CBSE">CBSE</option>
+                            <option value="ICBSE"> ICBSE </option>
+                            <option value="WB">WB</option>
+                            
+                            </select>
+                            <label for="stdBoard"> Board/SateBoard</label>
+                            <label> </label>
+                        </div>
+                
+                    <div class="form-group">
+                        <select id="stdCourse"  ng-model="userdata.stdCourse" style="font-family:Roboto" class="form-control pt-2 pb-0">
+                        <option value="EAMCET"> EAMCET </option>
+                        <option value="JEE MAINS">JEE MAINS</option>
+                        <option value="JEE ADV"> JEE ADV</option>
+                        <option value="NEET"> NEET </option>
+                        
+                        </select>
+                        <label> Course</label>
+                        <label> </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="stdCity"  ng-model="userdata.stdCity" class="form-control " required autocomplete="off">
+                        <label for="stdCity"> City/Vilage/Town</label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" id="stdCollege "  ng-model="userdata.stdCollege " class="form-control " required autocomplete="off">
+                        <label for="stdCollege "> College Name </label>
+                    </div>
+                    
+                        <div style="clear: both;"></div>
+                        <button type="button" class="btn btn-warning float-right" ng-click="updateprofile(userdata)">UPDATE</button>
+                         
+                </div>
+                
+            </form>   
+
+          </div>
+        </div>
+      </div>
+  </div>
+    
+  </div>
+  
+  
+  
+  
+  
+</div>

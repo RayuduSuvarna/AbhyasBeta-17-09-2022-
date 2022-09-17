@@ -1,0 +1,93 @@
+<html>
+    <head>
+
+        <!-- Stylesheets & CDN's -->
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/1.12.0/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+        
+        <!-- Scripts -->
+
+        <script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/1.12.0/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+
+        <!-- angular Script -->
+
+        <script src="angularsupport/angular.min.js" type="text/javascript"></script>
+        <script src="angularsupport/ngStorage.js"></script>
+        <script type="text/javascript">
+        var app = angular.module("test", ['ngStorage']);
+        app.controller('testingController', function($scope, $http, $filter, $localStorage,$window) {
+
+            $scope.datajson = [     
+                {
+                    "name": "Bill Gates",
+                    "position": "ceo",
+                    "office": "rjy",
+                    "age": 13,
+                    "salary": 1234
+                },
+                {
+                    "name": "Warren Buffett",
+                    "position": "ceo",
+                    "office": "sklm",
+                    "age": 34,
+                    "salary": 456
+                },
+                {
+                    "name": "Obama",
+                    "position": "ceo",
+                    "office": "amp",
+                    "age": 43,
+                    "salary": 45
+                },
+                {
+                    "name": "ElonMusk",
+                    "position": "ceo",
+                    "office": "kkd",
+                    "age": 56,
+                    "salary": 234
+                },
+                {
+                    "name": "Jeff Bezos",
+                    "position": "ceo",
+                    "office": "tun",
+                    "age": 34,
+                    "salary": 456
+                }
+            ];
+
+            $(document).ready(function () {
+                $('#example').DataTable();
+            });
+
+        });
+           
+        </script>
+    </head>
+    <body ng-app="test" ng-controller="testingController">
+        <div class="mt-3 p-5">
+
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Age</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in datajson">
+                        <td>{{x.name}}</td>
+                        <td>{{x.position}}</td>
+                        <td>{{x.office}}</td>
+                        <td>{{x.age}}</td>
+                        <td>${{x.salary}}</td>
+                    </tr>
+            </table>
+        </div>
+    </body>
+</html>

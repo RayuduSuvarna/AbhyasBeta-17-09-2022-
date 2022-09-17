@@ -1,0 +1,112 @@
+<div class="content-wrapper" ng-app="AbhyasApp" ng-controller="topicaskme">
+  <form>
+    <div class="row">
+      <div class="col-md-12 mb-2">
+        <div class="d-flex justify-content-between bg-white shadow p-2">
+          <aside class="flex-grow-1 align-self-center">
+            <!-- <input type="text" class="w-100 topSearchInput" > -->
+            <input type="text" id="form1" class="form-control border-0" ng-model="searchkeyword" autocomplete="off"
+              placeholder="Search Topic Name..." />
+          </aside>
+          <aside class="align-self-center">
+            <div class="position-relative">
+              <button class="btn btn-white" ng-click="searchTopicFromVideo(progid,searchkeyword)"> <i
+                  class="fa fa-search fa-lg" style="color: #FD9A10;" aria-hidden="true"></i></button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="uploadcardstyle">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card shadow mt-2 bg-white rounded">
+          <div class="card-header bg-white pb-0">
+            <div class="float-left">
+            <h4 class="card-title font2 text-muted text-uppercase">Ask Your <br/>
+              <span class="font4 color-orange">Subject Expert</span>
+            </h4>
+            </div>
+            <div class="float-right">
+            <img src="assets/images/academic_partner.png" width="70px">
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 p-0">
+                
+             
+            <div class="chat">
+              <div class="anyClass" id="scrolldiv">
+                <div class="chat-history" ng-show="askedquestions"
+                  ng-repeat="x in askedquestions | orderBy : '-createdAt'">
+                  <!--   ng-if="questionmsg"-->
+                  <ul class="mb-0 ">
+                    <li class="clearfix">
+                      <div class="message-data text-right">
+                        <span class="message-data-time font2 wt1">{{x.updatedAt | date:'dd-M-yyyy h:m a'}}</span>
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
+                      </div>
+                      <div class="message other-message float-right col-md-6">
+                        <img src="{{x.questionImg}}" class="w-100 mb-2"><br>
+                        <p class="float-left font2 wt2">{{x.questionDesc}}</p>
+                        <span class="font3 wt1 color-orange">{{selecttopicinfo.topicName}} </span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="chat-history" ng-show="askedquestions.length==0">
+                  <ul class="mb-0 ">
+                    <li class="clearfix">
+                      <div class="message-data text-right">
+                        <span class="message-data-time font2 wt1">10:15 AM, Today</span>
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar shadow">
+                      </div>
+                      <div class="message other-message shadow float-right col-md-6">
+                        <img src="assets/images/askmedemo.png" class="w-100 mb-2"><br>
+                        <p class="float-left font2 wt2">Question Description Here...</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="chat-message">
+                <form method="post" ng-submit="upload_question(message)">
+                  
+                  <div class="row">
+                    <div class="col-md-4 mb-2">
+                      <div class="input-group" style="border-radius:3px; border: 1px solid rgba(128, 128, 128, 0.459)" >
+                        <div class="custom-file">
+                          <input id="upload" ng-model="questionimg" type="file" accept=".jpg, .jpeg, .png" class="form-control border-0" required>
+                              <label id="upload-label" for="upload" style="font-weight:600" class="text-muted">Upload Here</label>
+                              
+                          <div class="input-group-append float-left ">
+                            <label for="upload" class="btn btn-light m-0 rounded-pill "> <i class="fa fa-paperclip fa-lg float-left text-muted"></i></label>
+                          
+                        </div> 
+                        </div>
+                      
+                      </div>
+                    </div>
+                    <div class="col-md-8 mb-2">
+                      <div class="input-group">
+                        <div class="custom-file">
+                          <input  type="text" ng-model="message" class="custom-file-label uploadmetextarea" placeholder="Message..!(Optional)">
+                        </div>
+                        <div class="input-group-append">
+                          <button class="btn btn-warning" type="submit"> Submit </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

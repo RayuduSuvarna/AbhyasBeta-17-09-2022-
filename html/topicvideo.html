@@ -1,0 +1,146 @@
+
+
+<div class="content-wrapper" ng-app="AbhyasApp" ng-controller="topicvideo">
+    <form >
+        <div class="row">
+            <div class="col-md-12 mb-2">
+                <div class="d-flex justify-content-between bg-white topSearch">
+                  
+                    <aside class="flex-grow-1 align-self-center">
+                        <!-- <input type="text" class="w-100 topSearchInput" > -->
+                        <input type="text" id="form1" class="form-control border-0" ng-model="searchkeyword"  autocomplete="off" placeholder="Search Topic Name..."/>
+                    </aside>
+                    <aside class="align-self-center">
+                        <div class="position-relative">
+                            <button class="btn btn-white" ng-click="searchTopicFromVideo(progid,searchkeyword)"> <i class="fa fa-search fa-lg" style="color: #FD9A10;" aria-hidden="true"></i></button>  
+                           
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+      </form>   
+      
+     <div class="row">
+         <div class="col-md-6">
+             <div class="card shadow mb-5 bg-white rounded">
+                 <div class="card-header bg-white">
+                    <!-- <a href style="float: right;" ng-click="gotoback()"> <i class="fa fa-chevron-circle-left fa-lg mb-3" aria-hidden="true" style="color:#FD9A10"></i>  </a> -->
+                        <h5 class="card-title color-orange">VIDEO RESOURCES<br/>
+                            
+                          <span class="heading2 wt2 text-dark">{{videoslist[0].topicId | uppercase}} </span>
+
+                         
+
+                            <div class="btn-group float-right d-none d-sm-block mr-2" role="group" aria-label="Basic example">
+                              <a  class="btn bgcolor-green shadow btn-sm" ng-click="startPracticeExam()"><span class="text-white"><span class="iconify" data-icon="ph:exam" data-width="20"></span> Practice Test</span></a>
+                                <a class="btn bgcolor-green btn-sm" ng-click="startAskMe()"><span class="text-white"><span class="iconify " data-icon="simple-icons:askubuntu" data-width="20"></span>  Doubt</span></a>
+                              </div>
+
+                              <div class="btn-group float-right d-block d-sm-none" role="group" aria-label="Basic example">
+                                <a  class="btn bgcolor-green btn-sm" ng-click="startPracticeExam(x.tagname)"><span class="iconify text-white" data-icon="ph:exam" data-width="20"></span></a>
+                                  <a class="btn bgcolor-green btn-sm" ng-click="startAskMe()"><span class="iconify text-white" data-icon="simple-icons:askubuntu" data-width="20"></span></a>
+                                </div>
+                        </h4>
+                 </div>
+                 <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="media mb-4" ng-repeat="x in videoslist">
+                            <img class="w-25 mr-2" ng-show="idxvalue!=$index" src="https://img.youtube.com/vi/{{x.videoid}}/maxresdefault.jpg"  ng-click="playVideo($index,x)">
+                            
+
+                            <iframe ng-show="idxvalue==$index"  class="w-100" height="300px" src="{{playvideourl}}" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                           
+                            
+                          <div class="media-body" ng-show="idxvalue!=$index">
+                            <h5 class="mt-0 mb-1">
+
+                               
+                               <span class="heading2 text-uppercase text-dark" >{{x.description | lowercase}}</span>
+                            </h5>
+                            
+                            <div class="w-100  mt-2" role="group" aria-label="Basic example">
+                                <a class="btn btn-outline-warning btn-sm"  ng-click="playVideo($index,x)"><span class="text-dark">Play</span></a>
+                                <a class="btn btn-outline-warning btn-sm" ng-click="startAssignment(x.tagname)"><span class="text-dark">Assignment</span></a>
+                               <!-- <a  class="badge badge-warning p-2 mr-4" ng-click="startPracticeExam(x.tagname)"><span class="iconify text-while" data-icon="ph:exam" data-width="20"></span> PracticeTest</a>
+                                <a class="badge badge-warning p-2" ng-click="startAskMe()"><span class="iconify" data-icon="simple-icons:askubuntu" data-width="20"></span> Ask Doubt</a>-->
+                              </div>
+
+                            
+                              
+
+
+                            </div>
+
+                            
+                           
+                        </li>
+                        
+                        
+                      </ul>
+                      
+                 </div>
+             </div>
+         </div>
+
+
+         <div class="col-md-6">
+          <div class="card shadow mb-5 bg-white rounded">
+              <div class="card-header bg-white">
+                     <h5 class="card-title color-orange">HISTORY<br/>
+                       <span class="heading2 wt2 text-dark">{{videoslist[0].topicId | uppercase}} </span>
+                         
+                     </h4>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-4" >
+                      <div class="m-2">
+                          TIME TRACK ON {{videoslist[0].topicId | uppercase}}
+                          </div>
+                          <img class="w-100 mt-4" src="https://quickchart.io/chart?c={type:'doughnut',data:{labels:['Video','Practice Text','Assignment'],datasets:[{data:[{{topicvideoimespent}},{{topicpracticeimespent}},{{topicassignimespent}}]}]},options:{plugins:{datalabels:{color:'white',font:{size:20}},doughnutlabel:{labels:[{text:'{{topictotaltimespent}} mins',font:{size:20}},{text:'total'}]}}}}">
+                    
+                  </div>
+              <div class="col-md-6" style="height: 410px; overflow: scroll;">
+              <table class="table font2 wt2 w-100">
+                  
+                  <tbody>
+                      <tr ng-repeat="x in topicstudytracker | orderBy:'-' | limitTo : 10" >
+                       
+                          <td width="20px">
+                              <img class="zoom bgcolor-orange p-2 rounded shadow"  src="./assets/icons/video-w.png" width="40px" ng-if="x.eventCategory=='Video'">
+                              <img class="zoom bgcolor-blue p-2 rounded shadow" src="./assets/icons/ask-w.png" width="40px" ng-if="x.eventCategory=='Ask Me'">
+                              <img class="zoom bgcolor-green p-2 rounded shadow" src="./assets/icons/exam-w.png" width="40px" ng-if="x.eventCategory=='PracticeExam'">
+                              <i class ="fa fa-desktop fa-lg mr-2 text-white bgcolor-yellow p-2 rounded shadow" ng-if="x.eventCategory=='Assignment'"></i>
+                          </td>
+                          <td>
+                              <p class="font1 wt1 mt-0 mb-0 text-dark"> {{x.eventCategory}} <span class="float-right"><i class="fa fa-clock-o"></i> {{x.created | date:'dd-MM-yy @ h:mma'}}</span></p>
+                              <div class="font2 wt4 color-orange">
+                                  
+                                  {{x.title1}}
+                                  <br/></div>
+                              
+      
+                              <div >{{x.title2}} <span class="float-right badge badge-success p-1" ng-if="x.result">{{x.result | number:0}}%</span></div>
+                             
+                          </td>
+                      </tr>                                                                  
+                  </tbody>
+              </table>
+              </div>
+                
+              </div>
+              </div>
+          </div>
+      </div>
+     </div> 
+   
+  </div>
+  
+  
+  
+  
+  
+</div>

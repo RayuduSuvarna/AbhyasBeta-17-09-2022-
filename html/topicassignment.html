@@ -1,0 +1,193 @@
+<div class="content-wrapper" ng-app="AbhyasApp" ng-controller="topicassignment">
+ 
+    <form >
+        <div class="row">
+            <div class="col-md-12 mb-2">
+                <div class="shadow rounded p-2 d-flex justify-content-between bg-white topSearch">
+                  
+                    <aside class="flex-grow-1 align-self-center">
+                        <!-- <input type="text" class="w-100 topSearchInput" > -->
+                        <input type="text" id="form1" class="form-control border-0" ng-model="searchkeyword"  autocomplete="off" placeholder="Search Topic Name..."/>
+                    </aside>
+                    <aside class="align-self-center">
+                        <div class="position-relative">
+                            <button class="btn btn-white" ng-click="searchTopicFromVideo(progid,searchkeyword)"> <i class="fa fa-search fa-lg" style="color: #FD9A10;" aria-hidden="true"></i></button>  
+                           
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+      </form> 
+  <div class="pt-3" ng-show="form==1">
+      <div class="card" >
+        <div class="card-header bg-white">
+
+            <table class="w-100 text-dark mt-0 mb-0">
+                <tr>
+                    <td class="text-uppercase font4">
+						<!-- <a href style="float: right;" ng-click="gotoback()"> <i class="fa fa-chevron-circle-left fa-lg mb-3" aria-hidden="true" style="color:#FD9A10"></i>  </a> -->
+                        <span class="font3 wt4 color-orange">{{topicidname | uppercase}}</span>
+                        <br /> Assignment
+                    </td>
+                    <td>
+                        <img src="assets/Preloader.gif" class="img-fluid float-right"
+                            style="height: 50px; width: 50px; border-radius: 100%" ng-hide="fpaper"
+                            alt="Loading. Please wait." />
+                    </td>
+                </tr>
+            </table>
+          
+     </div>
+     <div class="card-body" ng-show="fpaper">
+    <table class="w-100">
+        
+     
+            <tr ng-hide="fpaper"><td>
+               
+            </td></tr>
+            <tr ng-repeat="x in fpaper">
+                <td ng-if="selectedNumber == $index">                
+                    <p class="mt-2 mb-3"><b>{{selectedNumber+1}}.</b> 
+                            {{x.question_master_desc}}
+                    </p>		
+                        <p ng-if="selectedNumber == $index">
+                            <li ng-repeat='y in x.ans' style="float:left; padding-right:30px; list-style-type:none; min-width:250px; padding-bottom:20px;">								<div class="radiobtn" ng-click="myfun(x,$index)">
+                                <input type="radio" ng-checked="(y.my_answer==1)?true:false" id="y.my_answer"  name="radiogroup" >
+                                <label data-ng-init="UpdateMathJax()">{{y.answer_master_desc}}</label>
+                            </div>	
+                            </li>		
+                        </p>
+                </td>
+            </tr>
+    
+        <tfoot>
+            <tr>
+                <td>
+                    <hr/>
+                    <span ng-hide="selectedNumber == 0" class="float-left">
+                        <button class="btn btn-sm btn-warning" ng-click="onPrevious(selectedNumber)">Previous</button>
+                    </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span ng-hide="selectedNumber == fpaper.length-1" class="float-right">
+                        <button class="btn btn-sm btn-warning" ng-click="onNextFun(selectedNumber)">Next</button>
+                    </span>
+                    <span ng-if="selectedNumber == fpaper.length-1" class="float-right">
+                        <button class="btn btn-success" ng-click="submitexam()">Submit</button>
+                    </span>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    </div>
+    </div>
+</div>
+
+<div>
+	<div class="row mt-2" ng-repeat='x in paper' ng-show="form==2">
+		<div class="col-md-12" >
+		
+				<div class="card card-body shadow rounded text-muted">
+					<div class="row">
+						<div class="col-md-6">
+							<ul class="list-group">
+								<li class="list-group-item text-left">
+									<i class="fa fa-quora fa"></i> {{$index+1}}/{{fpaper.length}}
+									
+									<span class="badge badge-warning float-right" ng-show="x.time_spent>0"><i class="fa fa-clock-o fa-lg font2 m-1"> {{x.time_spent}}</i>  </span>
+								</li>
+								<li class="list-group-item text-left">
+									
+									<table class="w-100 mb-2">
+										<tr>
+											
+											<td class="text-left" ng-init="qlevel=x.question_master_level_id">
+												<span ng-if="qlevel<2"
+													class="btn btn-outline-success btn-sm rounded text-dark"><img
+														src="assets/icons/easy.png"
+														style="width: 12px;margin-top: -5px; margin-right: 10px; font-size: 8px !important;">
+													EASY</span>
+												<span ng-if="qlevel==2"
+													class="btn btn-outline-warning btn-sm rounded text-dark"><img
+														src="assets/icons/average.png"
+														style="width: 12px;margin-top: -5px;"> AVERAGE</span>
+												<span ng-if="qlevel==3"
+													class="btn btn-outline-danger btn-sm rounded text-dark"><img
+														src="assets/icons/difficult.png"
+														style="width: 12px;margin-top: -5px;"> DEFCULT</span>
+											</td>
+											<td>
+												<span class="btn btn-outline-dark btn-sm rounded float-right"><img
+														src="assets/images/cbse.png"
+														style="width: 15px;margin-top: -5px;"> JEEMAIN 2022</span>
+											</td>
+										</tr>
+										
+									</table>
+									<span data-ng-init="UpdateMathJax()" ><p>{{x.question_master_desc}}</p></span>
+
+								</li>
+
+								<li class="list-group-item" ng-repeat='y in x.ans'>
+										<span data-ng-init="UpdateMathJax()" ><p>{{y.answer_master_desc}}</p></span>
+										<span class="fa-stack text-success float-right">
+											
+											<i ng-if="y.my_answer ==undefined && y.answer_master_isright == '1'"
+											class="fa fa-check text-success"></i>
+										<i ng-if="y.my_answer =='0' && y.answer_master_isright == '1'"
+											class="fa fa-check text-success"></i>
+										<i ng-if="y.my_answer =='1' && y.answer_master_isright == '0'"
+											class="fa fa-times text-danger"></i>
+										<span ng-if="y.my_answer=='1' && y.answer_master_isright == '1'"
+											class="fa-stack text-success">
+											<i class="fa fa-check text-success"></i><i class="fa fa-check text-success"
+												style="margin-left:-7px"></i>
+										</span>
+
+										</span>
+								</li>
+						
+
+							</ul>
+						</div>
+
+						<div class="col-md-6 mb-2">
+							<ul class="list-group font2">
+								<li class="list-group-item text-left">
+                                    <img src="assets/images/solution.jpeg" style="zoom: 25% !important;" >
+                                   <img src="assets/images/verify.png" class="float-right p-0" style="zoom: 60%;" > 
+                                </li>
+								<li class="list-group-item text-left">
+									<p>You can find the hints or solutions for this question here.</p>
+
+								</li>
+								<li class="list-group-item text-left">
+									<div class="media">
+										<img src="https://img.youtube.com/vi/TS7VOP046IM/maxresdefault.jpg" class="w-25 mr-3" alt="...">
+										<div class="media-body">
+										  <button class="mt-0 mb-2 btn btn-outline-success btn-sm rounded  black-color-90">
+											 VIDEO EXPLANATION</button>
+											  <br/>
+										  <p>Related video resouces for better understanding.</p></div>
+									  </div>
+								</li>
+
+							</ul>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+    
+  </div>
+  
+  
+  
+  

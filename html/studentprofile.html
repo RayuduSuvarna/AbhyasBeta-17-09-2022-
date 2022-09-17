@@ -1,0 +1,252 @@
+
+
+<div class="content-wrapper" ng-app="AbhyasApp" ng-controller="studentprofile">
+          
+  <form >
+    <div class="row">
+        <div class="col-md-12 mb-2">
+            <div class="d-flex justify-content-between bg-white topSearch">
+              
+                <aside class="flex-grow-1 align-self-center">
+                    <!-- <input type="text" class="w-100 topSearchInput" > -->
+                    <input type="text" id="form1" class="form-control border-0" ng-model="searchkeyword"  autocomplete="off" placeholder="Search Topic Name..."/>
+                </aside>
+                <aside class="align-self-center">
+                    <div class="position-relative">
+                        <button class="btn btn-white" ng-click="searchTopicFromVideo(progid,searchkeyword)"> <i class="fa fa-search fa-lg" style="color: #FD9A10;" aria-hidden="true"></i></button>  
+                       
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+  </form>   
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card stdprofile-card-2 rounded shadow" style="height: 400px;">
+          
+          <div class="card-img-block">
+              
+              <img class="img-responsive" src="assets/images/usercover.jpg" alt="Card image cap">
+              
+          </div>
+          <div class="card-body">
+              <div class="col-12 data  mt-4">
+                  <table class="table table-borderless table-sm w-100 font2 wt1 text-dark">
+                      <tr>
+                          <td class="text-muted">Mobile</td>
+                          <td> {{userdata.stdMobileNo}}</td>
+                      </tr>
+                      <tr>
+                        <td class="text-muted">Email</td>
+                        <td> {{userdata.stdEmail}}</td>
+                    </tr> 
+                      <tr>
+                          <td class="text-muted">Board</td>
+                          <td>{{userdata.stdBoard}}</td>
+                      </tr>
+                      <tr>
+                          <td class="text-muted">
+                              Enrolled in
+                          </td>
+                          <td>
+                              <span class="course btn btn-outline-dark btn-sm rounded">
+                                <img src="assets/images/cbse.png" style="width: 15px;margin-top: -5px;"> {{studentcourse}}</span>
+                          </td>
+                      </tr>
+                  </table>
+              </div>
+              
+              <img src="assets/images/undraw_male_avatar_323b.svg" alt="profile-image" class="profile"/><br>
+              
+              <div class="card-title font4 wt1 text-dark" style="margin-top: 70px !important;"> {{userdata.stdName}} 
+              </div>
+              <div class="card-title font3 wt1 text-muted" style="margin-top: 115px !important;"></div>
+             
+              
+          </div>
+        
+          <div class="card-footer text-center bg-white">
+              <div class="row">
+                  <div class="col-md-12">
+                      <div class="icon-block">
+                          <a href="#"><i class="fa fa-facebook"></i></a>
+                          <a href="#"><i class="fa fa-twitter"></i></a>
+                         
+                        </div>
+                  </div>
+              </div>
+              </div>
+      </div> 
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="profileform">
+                    <div class="row"> 
+                       <div class="col-md-10 mt-2"> 
+                           <div class="form-group"> 
+                            <input type="text" id="stdSuc" ng-model="stdSuc" class="form-control " required autocomplete="off">
+                            <label for="stdSuc"> Student SUC Code </label>
+                            <p class="text-danger text-center" ng-hide="showtable==1"> {{error}} </p>
+                           </div>
+                       </div>
+                       <div class="col-md-2 mt-2">
+                            <button class="btn btn-sm" ng-click="getsuc(stdSuc)" style="background-color: #FD9A10; color:white"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                       </div>
+                       <div class="col-md-12" ng-show="showtable==1">
+                        <table class="w-100 table table-sm table-bordered mb-2 font2 text-muted">
+                            <tr>
+                                <td> Suc </td>
+                                <td style="color: #000"> {{suc_code}} </td>
+                            </tr>
+                            <tr>
+                                <td> Campus </td>
+                                <td style="color: #000;"> ADCKKD </td>
+                            </tr>
+                            <tr>
+                                <td> Group </td>
+                                <td style="color: #000"> MPCS </td>
+                            </tr>
+                            <tr>
+                                <td> Section </td>
+                                <td style="color: #000"> MPCS-1-1A </td>
+                            </tr>
+                            <tr>
+                                <td> R.No </td>
+                                <td style="color: #000"> 1 </td>
+                            </tr> 
+                        </table>
+                        <div class="mt-3" style="text-align:center">
+                            <a class="btn shadow btn-sm text-white" ng-click="confirmation()" style="background-color:#34A853"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Confirm </span></a>
+                        </div>
+                        <!-- <table class="table table-sm table-bordered">         
+                            <thead> 
+                              <tr >  
+                                <th> Suc</th>   
+                                <td> {{suc_code}} </td>
+                              </tr>
+                              <tr>  
+                                <th> Campus</th>  
+                                <td> ADCKKD </td>
+                              </tr>
+                              <tr>  
+                                <th> Group</th>   
+                                <td> MPCS </td>
+                              </tr>
+                              <tr>  
+                                <th> Section</th>   
+                                <td> MPCS-1-1A </td>
+                              </tr>
+                              <tr>  
+                                <th> R.No</th>   
+                                <td> 1 </td>
+                              </tr>
+                            </thead>
+                        </table> -->
+                            <!-- <table class="table table-bordered table-sm"> 
+                                <thead>
+                                    <tr class="text-center">
+                                        <th> R.No</th>
+                                        <th> Suc</th>
+                                        <th> Campus</th>
+                                        <th> Group</th>
+                                        <th> Section</th> 
+                                    </tr>                                    
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> 1 </td>
+                                        <td> {{suc_code}} </td>
+                                        <td> ADCKKD </td>
+                                        <td> MPCS </td>
+                                        <td> MPCS-1-1A </td> 
+                                    </tr>
+                                </tbody>
+                            </table> -->
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+      <!-- Second Form  -->
+      <div class="col-md-6 mt-2">
+        <div class="card">
+          <div class="card-body">
+            
+              <form class="profileform">
+                    <h2 class="modal-title">USER PROFILE </h2>
+                    <h5 class="text-secondary"> Personal Details </h5>
+                    <label> </label>
+                <div class="form-group">
+                    <input type="text" id="stdName"  ng-model="userdata.stdName" class="form-control " required autocomplete="off">
+                    <label for="stdName"> Name </label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="stdMobileNo"  ng-model="userdata.stdMobileNo" class="form-control " required autocomplete="off">
+                    <label for="stdMobileNo"> Mobile Number </label> 
+                </div>
+                <div class="form-group">
+                    <input type="email" id="emailid" name="emailid" ng-model="userdata.stdEmail" class="form-control" autocomplete="off">
+                    <label for="emailid">Email</label>
+                </div>
+                <div class="form-group">
+                     <select id="stdAbout" name="stdAbout" ng-model="userdata.stdAbout" class="form-control" required autocomplete="off">  
+                         <option value=""> Select </option>
+                         <option value="Aditya"> Aditya </option>
+                         <option value="Edignate"> Edignate </option>
+                         <option value="FriendReffereal"> Friend Refferal </option>
+                         <option value="Youtube"> Youtube </option>
+                         <option value="SocialMedia"> Social Media </option>
+                     </select>
+                     <label for="stdAbout">How You Know About ABHYAS<span class="text-danger">*</span></label>
+                 </div>
+                 <div class="form-group">
+                     <select id="stdBoard" name="stdBoard" ng-model="userdata.stdBoard" class="form-control" required autocomplete="off"> 
+                         <option value=""> Select </option>
+                         <option value="STATEBOARD"> StateBoard </option>
+                         <option value="CBSE"> CBSE </option>
+                         <option value="ICSE"> ICSE </option> 
+                     </select>
+                     <label for="stdBoard">Board<span class="text-danger">*</span></label>
+                 </div> 
+                 <div class="form-group">
+                    <select type="text" id="stdYear" name="stdYear" ng-model="userdata.stdYear"  class="form-control" required autocomplete="off"> 
+                     <option value=""> Select </option>
+                        <option value="2022-2023"> 2022-23 </option>
+                        <option value="2023-24"> 2023-24 </option>
+                        <option value="2024-25"> 2024-25 </option> 
+                    </select>
+                    <label for="stdYear">Exam appearing Year<span class="text-danger">*</span></label>
+                </div>
+                <div class="form-group">
+                    <select id="stdCourse"  ng-model="userdata.stdCourse" style="font-family:Roboto" class="form-control pt-2 pb-0">
+                    <option value="EAMCET"> EAMCET </option>
+                    <option value="JEE MAINS">JEE MAINS</option>
+                    <option value="JEE ADV"> JEE ADV</option>
+                    <option value="NEET"> NEET </option>
+                    
+                    </select>
+                    <label> Course</label>
+                    <label> </label>
+                </div>
+                <div style="clear: both;"></div>
+                <button type="button" class="btn btn-warning float-right" ng-click="updateprofile(userdata)">UPDATE</button> 
+            </form>    
+          </div>
+        </div>
+      </div>
+      <!-- <div class="card">
+        <div class="card-body">
+
+        </div>
+      </div> -->
+  </div>
+    
+  </div>
+  
+   

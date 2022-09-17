@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta property="og:title" content="Abhyas" />
+    <meta property="og:type" content="video.movie" />
+    <meta property="og:description" content="The perfect supplement for those students, who are having inadequate study time.">
+    <meta property="og:url" content="https://abhyas.aditya.ac.in/beta/" />
+    <meta property="og:image" content="https://abhyas.aditya.ac.in/beta/images/tumbnail.jpg" />
+
+    <meta name="twitter:title" content="Abhyas ">
+    <meta name="twitter:description" content="The perfect supplement for those students, who are having inadequate study time.">
+    <meta name="twitter:image" content="https://abhyas.aditya.ac.in/beta/images/tumbnail.jpg">
+    <meta name="twitter:card" content="AI Powered Learning Platform">
+<!-- font family -->
+    <link href="./assets/css/fonts.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
+    <!-- <link rel="stylesheet" href="./assets/css/profile.css" type="text/css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    
+    <!-- angular Script -->
+    <script src="angularsupport/angular.min.js" type="text/javascript"></script>
+      <script src="angularsupport/ngStorage.js"></script>
+      <script type="text/javascript">
+        var app = angular.module("AbhyasApp", ['ngStorage']);
+        app.controller('homepage', function($scope, $http, $filter, $localStorage,$window,$interval) {
+                // var apipath = 'http://aditya.ac.in:3002/api/';
+                // var apipath = 'http://10.60.1.22:3400/api';
+                 var apipath = 'https://abhyas.aditya.ac.in/beta/api'; 
+                // var apipath = 'http://10.70.3.94:3400/api';
+
+        if($window.localStorage.getItem('studentdata')){
+			window.location.href = 'home.html';
+		}
+
+            $scope.showdiv=1;
+            $scope.JoinUser = function(dt){
+                if(dt.stdgroup==undefined){
+                    $scope.errgrp = "Please select course";
+                }
+                var obj={
+                    "stdMobileNo": dt.mobile,
+                    //"stdPwd": dt.pwd,
+                    "stdCourse": dt.stdgroup,
+                    "stdName": dt.name,
+                    "stdBoard": dt.board,
+                    "stdAbout": dt.about,
+                    "stdYear": dt.year,
+                    "stdEmail": dt.emailid
+                }
+                // console.log(obj);
+                if ($("#formvalidate").valid() && dt.stdgroup!=undefined){
+                    
+                    $http.post(apipath+"/profile/validatemobile", obj).success((data)=>{
+                        
+                        $scope.responseotp=data
+                        // console.log($scope.responseotp);   
+                        if(data.otp==0){
+                                $scope.msgerror='Mobile Number Already Registered'
+                        }else {
+                            $('#SignUpModal').modal('hide');
+                            $('#OTPModel').modal('show');
+                            $scope.validotp = data;
+
+                            $scope.countDown = 59;    
+                            var p = $interval(function(){ 
+                                
+                                if($scope.countDown==0){
+                                    $interval.cancel(p);
+                                 }
+                                 $scope.countDown--
+                                //// console.log($scope.countDown--)
+                            
+                            },1000,0);
+
+                        }                                         
+                    })
+                
+                }
+            }     
+            
+            $scope.joinotpverify = (val) => {
+                if($scope.responseotp.otp==val.mobileotp){  
+                    delete $scope.responseotp.otp;
+                    // console.log($scope.responseotp);
+                    $http.post(apipath+"/profile/register",$scope.responseotp).success((data)=>{
+                        // console.log(data)
+                        $window.localStorage.setItem('studentdata',JSON.stringify($scope.responseotp));
+                        $scope.logindata = JSON.parse($window.localStorage.getItem('studentdata'));
+                        window.location.href='home.html';
+                    })
+                } else {
+                    $scope.invalidotp = "Invalid OTP";
+                }
+            }
+
+            $scope.joinresendotp= ()=>{
+                // console.log($scope.responseotp)
+                $http.post(apipath+"/profile/validatemobile", $scope.responseotp).success((data)=>{
+                    // console.log(data);
+                    $scope.countDown = 59;    
+                            var p = $interval(function(){ 
+                                
+                                if($scope.countDown==0){
+                                    $interval.cancel(p);
+                                 }
+                                 $scope.countDown--
+                                // console.log($scope.countDown--)
+                            
+                            },1000,0);
+                })
+            }
+
+            
+            
+            $scope.loginsubmit=function(logdata) {
+                //console.log(logdata)
+                if(logdata.loginmobile==''){
+                    $scope.loginerror='Enter Valid Credentials'
+                }else {
+                    
+                    let obj={
+                        "stdMobileNo": logdata,
+                    }
+                    $scope.logindata = obj;
+
+                    $http.post(apipath+"/profile/verifyuser", obj).success((data)=>{
+                        // console.log(data);
+                        $scope.loginotp=data;
+                        $scope.userlogindata=data.userdata;
+                        // console.log($scope.loginotp.otp)
+                        if(data.userdata.length==0){
+                            $scope.loginerror='Your mobile number is not registred'
+                        }else{
+                            $('#SigninModal').modal('hide');
+                            $('#LoginOTPModal').modal('show');
+                            
+                            $scope.countDown = 59;    
+                            var p = $interval(function(){ 
+                                
+                                if($scope.countDown==0){
+                                    $interval.cancel(p);
+                                 }
+                                $scope.countDown--;
+                            
+                            },1000,0);
+                        }
+                        // window.location.href='home.html';
+                    })
+                    
+                }
+            }
+            $scope.Loginotpsubmit = function(otpvalue){
+                // alert(otpvalue)
+              //  console.log($scope.userlogindata)
+                if($scope.loginotp.otp==otpvalue){      
+
+                    $scope.videoPlayMongo = {
+                        "userId": $scope.userlogindata[0].stdMobileNo,
+                        "eventCategory": 'Login',
+                        "eventDetails": $scope.userlogindata[0],                  
+                    }
+                    //console.log($scope.videoPlayMongo);
+                    $http({
+                            withCredentials: false,
+                            method: 'post',
+                            url: 'https://abhyas.aditya.ac.in/beta/api/events',
+                            headers: { 'Content-Type': 'application/json' },
+                            data: $scope.videoPlayMongo
+                        }).success(function (data) {
+                            //console.log(data);
+                        });
+                       $window.localStorage.setItem('studentdata',JSON.stringify($scope.userlogindata[0]));
+                        window.location.href='home.html';
+                } else {
+                    $scope.invalidotp = "Invalid OTP";
+                }
+
+            }
+
+            $scope.loginresendotp= ()=>{
+                // console.log(phn)
+                // console.log($scope.loginmobile)
+                // console.log($scope.loginotp);
+                if(!$scope.loginotp.otp){
+
+                    var obj={
+                        "stdMobileNo": $scope.loginmobile,
+                        }
+
+                } else {
+                    var obj={
+                        "stdMobileNo": $scope.loginmobile,
+                        "otp" : $scope.loginotp.otp
+                        }
+                }
+               //  console.log(obj)
+                $http.post(apipath+"/profile/verifyuser", obj).success((data)=>{
+                        // console.log(data);
+                        $scope.validotp = data;
+
+
+                        $scope.countDown = 59;    
+                            var p = $interval(function(){ 
+                                
+                                if($scope.countDown==0){
+                                    $interval.cancel(p);
+                                }
+                                $scope.countDown--
+                            //    console.log($scope.countDown--)
+                            
+                            },1000,0);
+                        })
+                
+            }
+
+            $scope.loginpage= () => {
+                
+                $('#SigninModal').modal('hide');
+                $('#SignUpModal').modal('show');
+            }
+
+            $scope.signinpage= () => {
+                $('#SignUpModal').modal('hide');
+                $('#SigninModal').modal('show');
+            }
+
+            $scope.user = {
+                pwd: "",
+                cpwd: ""
+            };
+    });
+
+</script>
+<title>ABHYAS</title>
+
+  </head>
+  <body ng-app="AbhyasApp" ng-controller="homepage">
+      <div class="container-fluid cstmcontainer">
+        <nav class="navbar navbar-expand-lg navbar-light bg-transparent" >
+            <a class="navbar-brand" href="#"><img src="assets/images/logo.png" class="logo" /></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse topmenu" id="nav">
+                <ul class="navbar-nav m-0 ml-lg-auto p-3 p-lg-0">
+                    <li class="d-inline d-lg-none">
+                        <button data-toggle="collapse" data-target="#nav" class="close float-right">&times;</button>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">WHY</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">ACADEMIC PARTNER</a>
+                    </li>
+                   
+                    <li class="nav-item" data-toggle="collapse" data-target="#nav">
+                        <a href="" class="nav-link" data-toggle="modal" data-target="#SignUpModal">JOIN </a>
+                    </li>
+                    <li class="nav-item" data-toggle="collapse" data-target="#nav">
+                        <a href="" class="nav-link" data-toggle="modal" data-target="#SigninModal">LOGIN </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+          <!-- <div class="row">
+              <div class="col-md-12">
+                <header class="d-flex darkcolor">
+                    <div class="flex-grow-1"><img src="assets/images/logo.png" class="logo" /></div>
+                    <div class="d-flex grid-gap-small px-4 align-self-center">
+                        <aside class="align-self-center">Home</aside>
+                    </div>
+                    <div class="d-flex grid-gap-small px-4 align-self-center">
+                        <aside class="align-self-center">Why</aside>
+                    </div>
+                    <div class="d-flex grid-gap-small px-4 align-self-center">
+                        <aside class="align-self-center">Acadamic Partner</aside>
+                    </div>
+                    <div class="d-flex grid-gap-small px-4 align-self-center">
+                        <a href="" style="color:black" data-toggle="modal" data-target="#SigninModal"> Login </a> 
+                    </div>
+                    <div class="d-flex grid-gap-small px-4 align-self-center">
+                        <a href="" style="color:black" data-toggle="modal" data-target="#SignUpModal"> Join </a> 
+                    </div>
+                    
+                </header>
+              </div>
+          </div>
+            <div class="d-flex grid-gap-small px-4 align-self-center">
+                <aside onclick="openNav()" style="cursor: pointer;"><img src="assets/images/toggle.svg"></aside>
+                <div id="mySidenav" class="sidenav">
+                    <a href="javascript:void(0)" class="closebtn" onClick="closeNav()">
+                        <img src="assets/images/close.svg" class="close" />
+                    </a>
+                    <a href="#">About</a>
+                    <a href="#">Services</a>
+                    <a href="#">Clients</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div> -->
+        <section class="slider mt-4">
+            <div class="row">
+                
+                   
+                
+                <div class="col-md-7  align-self-center animate__animated animate__slideInLeft">
+                    <aside>
+                        <h1 class="text-white font_16  d-inline-block brds5 px-3 py-2 mt-2  shadow" style="background-color: #F19D4B;">
+                            <!--Never Stop Learning-->Strategically Crafted
+                        </h1>
+                        <div class=" d-block d-lg-none  rounded p-4 mb-4">
+                            <img src="assets/images/studybanner.jpg" class="w-100 rounded-pill">
+                            <h4 class="hdng4 text-center  text-dark">The perfect supplement for those students, who are having inadequate study time.</h4>
+                            <h6 class="cstmbt1 float-center shadow pb-2 pt-2 mb-2">AI Powered Learning Platform</h6>
+                        </div>
+                        
+                        <h2 class="hdng2 text-center darkcolor py-3 d-none d-lg-block" >
+                           <!-- Grow up your skills<div> by online courses</div>  with Abhyas -->
+                        The perfect supplement for those students, who are having inadequate study time.
+                        </h2>
+
+                        <p style="text-align: justify;">
+                        <b class="darkcolor">Abhyas</b> is the perfect and apt educative supplement for the students who have thirst of knowledge and Zeal to learn more and excel but deprived of adequate time and means to
+                        fulfil their wish. 
+                        Just by sparing an hour of your convenience daily, you can learn, practise, take a test, evaluate and enrich your standard with the help of this platform.
+                        <div><b class="darkcolor">AI powered Abhyas</b> helps personalize every aspect of your <b class="darkcolor">JEE / NEET</b> preparation, starting from designing your study plan to ensuring your learning up-to-mark to help you build hyper-Specific improvement plans.
+                        </div>
+                        </p>
+                        <p class="d-none d-lg-block cstmbt1 mb-5 float-right shadow  ">AI Powered Learning Platform</p>
+                    </aside>
+                </div>
+                <div class="col-md-5 d-none d-lg-block text-left animate__animated animate__slideInRight">
+                    <img src="assets/images/studybanner.jpg" class="banner w-100 rounded-pill" style="height: 600px;">
+                </div>
+            </div>
+        </section>
+        <section class="audio">
+            <div class="row">
+                <div class="col-lg-8 text-center offset-lg-2">
+                    <h2 class="hdng2 darkcolor">High standard conceptual videos along with JEE & NEET model questions.</h2>
+                    <p>Get everything you need right from the foundation concepts to thousands of practice
+                        questions, JEE / NEET like adaptive mock tests along with world-class support.</p>
+                     <a href="#"   class="d-inline-block cstmbt1 mb-5 shadow">Create your own Personalized Practice Test in less than 10 seconds.</a>  
+                </div>
+            </div>
+            <!-- <div class="live position-relative mt-5 mb-3" style="padding: 0;">
+                <div class="p-4"><img src="assets/images/vbanner.jpg" style="width: 100%;"></div>
+                <div class="upvideo w-100">
+                    <div class="d-flex justify-content-between p-4">
+                        <aside class="m-4 bg-white align-self-center d-none d-sm-block"><img src="assets/images/girl.jpg" class="smallvedio"></aside>
+                        <aside class="p-4 align-self-end"><img src="assets/images/phone.png"/></aside>
+                        <aside class="p-4 align-self-end"><img src="assets/images/bluearw.png"/></aside>
+                    </div>
+                </div>
+            </div> -->
+
+	     <div class="live position-relative mt-5 mb-3 shadow pl-4 pr-4"  style="padding: 0;background-color: #333333;">
+
+                <div style="padding:60% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/707211074?h=0990186385&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Abhyas"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+                <!-- <video autoplay loop controls id="thevideo" width="100%" height="700" class="responsive-iframe">
+                    <source src="assets/footage.webm" type='video/webm; codecs="vp8, vorbis"'>
+                    <source src="assets/footage.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+                    <source src="assets/footage.ogg" type='video/ogg; codecs="theora, vorbis"'>
+                   </video> -->
+                
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <div class="ourservice shadow">
+                        <img src="assets/images/video.png" class="animate__animated animate__pulse animate__infinite animate__delay-0.5s">
+                        <div class="align-self-center hdng4 mb-0">Video Lessons</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ourservice shadow">
+                        <img src="assets/images/icons8-quiz-65.png" class="animate__animated animate__pulse animate__infinite animate__delay-0.5s">
+                        <div class="align-self-center hdng4 mb-0">Assignments</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ourservice shadow">
+                        <img src="assets/images/icons8-education-48.png" class="animate__animated animate__pulse animate__infinite animate__delay-0.5s">
+                        <div class="align-self-center hdng4 mb-0">Practice Tests</div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="d-flex justify-content-center grid-gap-lg">
+                <aside class="bg-white d-flex grid-gap cbdy">
+                    <div class="align-self-center "><img src="assets/images/video.png"  width="48px" class="animate__animated animate__pulse animate__infinite animate__delay-0.5s"></div>
+                    <div class="align-self-center hdng4 mb-0">Video Lessons</div>
+                </aside>
+                <aside class="bg-white d-flex grid-gap cbdy">
+                    <div class="align-self-center"><img src="assets/images/icons8-quiz-65.png" class="animate__animated animate__pulse animate__infinite animate__delay-0.5s"></div>
+                    <div class="align-self-center hdng4 mb-0">Assignments</div>
+                </aside>
+                <aside class="bg-white d-flex grid-gap cbdy">
+                    <div class="align-self-center"><img src="assets/images/icons8-education-48.png" class="animate__animated animate__pulse animate__infinite animate__delay-0.5s"></div>
+                    <div class="align-self-center hdng4 mb-0">Practice Tests</div>
+                </aside>
+            </div> -->
+        </section>
+        <section class="qualified text-center mt-5 pt-5">
+            <div class="row">
+                <div class="col-lg-8 text-center offset-lg-2">
+                    <h4>See why students fall in love with <b class="darkcolor">Abhyas</b>. Who said that learning can’t be fun?</h4>
+                    <h2 class="hdng2 darkcolor">Choose Abhyas for JEE / NEET Prep </h2>
+                    <p>The <b class="darkcolor">Abhyas</b> identifies the right sequence of learning for you and segregates the entire syllabus into
+                        clear weekly goals, keeping in view of the time you can afford.</p>
+                </section>  
+        <section class="standards">
+            <div class="row">
+                <div class="col-md-4">
+                    <aside class="bg-white text-center py-5 px-5  mb-4 shadow">
+                        <img src="assets/images/6333765.jpg" width="100%" class="mb-2 animate__animated animate__fadeInUp" />
+                        <h3 class="hdng3 darkcolor">Conceputual Videos</h3>
+                        <p>Our 1000+ hours of interactive
+                            video lessons, starting from
+                            the very basics to the advanced
+                            level and ensure you learn
+                            every thing in detail.</p>
+                        <!-- <a href="#" class="cstmbt2 mb-0 d-inline-block">Class Details</a> -->
+                    </aside>
+                </div>
+                <div class="col-md-4">
+                    <aside class="bg-white text-center py-5 px-5  mb-4 shadow">
+                        <img src="assets/images/qb.png" width="100%" class="mb-1" />
+                        <h3 class="hdng3 darkcolor">3+ <small>Lakhs</small> Questions</h3>
+                        <p>Our subject experts have made
+                            an intensive research on 3+
+                            lakh questions to
+                            segregate based on the level of
+                            the question on the platform to
+                            ensure that, they are <b class="darkcolor">JEE / NEET</b> model questions like.</p>
+                        <!-- <a href="#" class="cstmbt2 mb-0 d-inline-block">Class Details</a> -->
+                    </aside>
+                </div>
+                <div class="col-md-4">
+                    <aside class="bg-white text-center py-5 px-5  mb-4 shadow">
+                        <img src="assets/images/3156627.jpg" width="100%" class="mb-2" />
+                        <h3 class="hdng3 darkcolor">Meaningful Analytics</h3>
+                        <p>The <b class="darkcolor">Abhyas</b> uses machine
+                            learning to identify the reason
+                            behind your mistakes & leads
+                            to actionable insights to help
+                            you work on the weak areas.</p>
+                        <!-- <a href="#" class="cstmbt2 mb-0 d-inline-block">Class Details</a> -->
+                    </aside>
+                </div>
+                <div class="col-md-4">
+                    <aside class="bg-white text-center py-5 px-5  mb-4 shadow">
+                        <img src="assets/images/3249189.jpg" width="100%" class="mb-2" />
+                        <h3 class="hdng3 darkcolor">Master Difficult Questions</h3>
+                        <p>Struggling with a difficult Question? No problem! Use our Ask-a-tutor messaging system for personalized explanations from a subject expert.</p>
+                        <!-- <a href="#" class="cstmbt2 mb-0 d-inline-block">Class Details</a> -->
+                    </aside>
+                </div>
+                <div class="col-md-4">
+                    <aside class="bg-white text-center py-5 px-5  mb-4 shadow">
+                        <img src="assets/images/mistakes.jpg" width="100%" class="mb-2" />
+                        <h3 class="hdng3 darkcolor">Identify Common Traps</h3>
+                        <p>Identifing common traps are so
+                            hard-wired into our thinking
+                            process that we often fail to
+                            recognize them even when we
+                            are falling right into them.</p>
+                            <!-- <a href="#" class="cstmbt2 mb-0 d-inline-block">Class Details</a> -->
+                    </aside>
+                </div>
+                <div class="col-md-4">
+                    <aside class="bg-white text-center py-5 px-5  mb-4 shadow">
+                        <img src="assets/images/savetime.jpg" width="100%" class="mb-2" />
+                        <h3 class="hdng3 darkcolor">Optimise your study time</h3>
+                        <p> AI maximizes efficiency by
+                            ensuring that you spend time
+                            mastering relevant content,
+                            avoiding the content you already
+                            know.</p>
+                        <!-- <a href="#" class="cstmbt2 mb-0 d-inline-block">Class Details</a> -->
+                    </aside>
+                </div>
+            </div>
+            <!--<div class="row">
+                <div class="col-md-12 text-center">
+                    <a href="#" class="d-inline-block cstmbt1">Visit More Classes</a>
+                </div>
+            </div>-->
+        </section>
+        <section class="collegeLevel graybg my-5 shadow">
+            <div class="row">
+                <div class="col-md-6 align-self-center pl-5">
+                    <div class="graybt mt-4 bg-white shadow">Never Stop Learning</div>
+                    <h2 class="hdng2 darkcolor"><b class="darkcolor">20,000+</b> students have leveraged Abhyas to archive their JEE / NEET ambitions.</h2>
+                  
+                        <a href="#" class="d-inline-block cstmbt1 shadow text-center">Better than any other learning platform out there.</a>    
+                </div>
+                <div class="col-md-6 align-self-center text-right pt-5">
+                    <img src="assets/images/stpic.png"  class="img-fluid" />
+                </div>
+            </div>
+        </section>
+        <section class="share py-5">
+            <div class="row">
+                <div class="col-lg-10 offset-lg-1">
+                  <div class="row">
+                      <div class="col-md-6 align-self-center">
+                          <img src="assets/images/analytics.svg" class="img-fluid">
+                      </div>
+                      <div class="col-md-6 align-self-center">
+                        <h4 class="darkcolor">Supported by</h4>
+                        <h2 class="hdng2 darkcolor">Analytics that help</h2>
+                        <h4 class="darkcolor" style="margin-top: -20px; margin-bottom: 20px;">Push your score from average to distinction level</h4>
+                        <p>
+                           <span class="darkcolor">What stops you to get a good score?</span> &nbsp;Its your inability to identify your weaknesses. The revolutionary <b class="darkcolor">Abhyas</b> helps identify these chinks in your armor, empowering you to achieve your target.
+                        </p>
+                        <a href="#" class="d-inline-block cstmbt1 shadow">Join Now</a>
+                    </div>
+                  </div>  
+                </div>
+            </div>
+        </section>
+        <section class="collegeLevel graybg my-5 shadow bg-white">
+            <div class="row">
+                
+                <div class="col-md-7 align-self-center pl-5 pt-4">
+                    <div class="d-inline-block cstmbt1 shadow">Academic Partner</div>
+                    <h2 class="hdng2 darkcolor">Aditya Educational Instituions <div>Established in 1984. </div> </h2>
+                  
+                        <p>Aditya Educational Instituions is among the pioneers of education in Andhra Pradesh. Over the years, Aditya has empowered the nation through its myriad of educational institutions and teaching prowess.</p>   
+                        <a href="#" class="cstmbt2 mb-0 d-inline-block shadow mb-2 mr-2">Entire curriculum designed by Aditya subject experts.</a>
+                    </div>
+                <div class="col-md-5 align-self-center text-right">
+                    <img src="assets/images/aditya.jpeg"  class="routecornerimage shadow p-1" />
+                </div>
+               
+            </div>
+        </section>
+        <!-- <section class="subscribe">
+            <div class="d-flex invertcolor py-5 justify-content-center grid-gap-xxl">
+                <div class=" align-self-center">
+                   <img src="assets/images/c1.svg">
+                </div>
+                
+                <div class=" align-self-center">
+                    <h2 class="hdng2 text-white">Subscribe For Get Update<div> Every New Courses</div></h2>
+                   
+                    
+                </div>
+                    <div class="align-self-center">
+                        <img src="assets/images/c2.svg">
+                    </div>
+            </div>
+        </section> -->
+        <footer>
+            <div class="justify-content-between d-sm-flex">
+                <div class="">
+                    <img src="assets/images/logo.png" />
+                    <p>©2022 abhyas.ai</p>
+                    
+                </div>
+                
+               <div class="">
+                    <h4 class="hdng4 darkcolor mb-3">Quick links</h4>
+                    <ul class="cstmul">
+                        <li>HOME</li>
+                        <li>WHY</li>
+                        <li>JOIN</li>
+                        <li>LOGIN</li>
+                        <li>ACADEMIC PARTNER</li>
+                    </ul>
+                </div>
+                
+            </div>
+        </footer>
+
+                  <!-- Modal LOGIN -->
+      <form class="regoform" id="loginvalidate" name="loginvalidate" ng-submit="loginsubmit(loginmobile)">
+        <div class="modal fade" data-toggle="modal" id="SigninModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered "  role="document">
+            <div class="modal-content" style="margin-right: 40px;">
+                
+                <div class="float-right mr-4 mt-4">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
+
+                <div class="modal-body loginfom">
+                    <h4 class="title mb-4" >Login to <span class="modal-title">Abhyas</span></h4>
+                       <br/>
+                         <div class="form-group mb-4">
+                           <input type="text" id="loginmobile" name="loginmobile" ng-model="loginmobile" class="form-control" pattern="[0-9\s]+"
+                           maxlength="10" minlength="10" required autocomplete="off">
+                           <label for="loginmobile">Phone Number</label>
+                         </div>
+                         <h6 class="text-danger text-center"> {{loginerror}} </h6>
+                            <button type="submit" class="btn btn-warning rounded-pill shadow btn-block mb-4">LOGIN </button>
+                       <h5 style="cursor: pointer;" class="haveacc" ng-click="loginpage()" >I don't have an account</h5>
+               </div>
+                </div>
+            </div>
+            </div>
+      </form>
+
+
+        <!-- Modal Sign UP -->
+        <form ng-submit="JoinUser(x)" class="regoform" id="formvalidate" name="formvalidate">
+            <div class="modal fade" id="SignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+               <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content" style="margin-right: 40px;">
+
+                <div class="float-right mr-4 mt-2">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                        <h4 class="title mb-4" >Join <span class="modal-title">Abhyas</span></h4>
+                        <h6 class="text-danger">{{errgrp}}</h6> 
+                        <label></label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" tabindex="1" id="name" name="name" ng-model="x.name" class="form-control" required autocomplete="off">
+                                    <label for="name">Name<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" id="emailid" tabindex="3" name="emailid" ng-model="x.emailid" class="form-control" autocomplete="off">
+                                    <label for="emailid">Email</label>
+                                </div>
+                            </div>
+                            <!-- second column -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" id="mobile" tabindex="2" name="mobile" ng-model="x.mobile" class="form-control " pattern="[0-9\s]+"
+                                    maxlength="10" minlength="10" required autocomplete="off">
+                                    <label for="mobile">Phone Number<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="form-group">
+                                     <select id="about" name="about" tabindex="4" ng-model="x.about" ng-init="x.about=''" class="form-control" required autocomplete="off">  
+                                         <option value=""> Select </option>
+                                         <option value="Aditya"> Aditya </option>
+                                         <option value="Edignite"> Edignite </option>
+                                         <!-- <option value="FriendReffereal"> Friend Refferal </option>
+                                         <option value="Youtube"> Youtube </option>
+                                         <option value="SocialMedia"> Social Media </option> -->
+                                     </select>
+                                     <label for="about">How You Know About ABHYAS<span class="text-danger">*</span></label>
+                                 </div>
+                            </div>
+                        </div>
+                          
+                        <h6 class="subtitle">Exam Preparing for<span class="text-danger">*</span></h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="radio" ng-model="x.stdgroup" value="EAMCET" name="stdgroup" id="option-1">
+                                <label for="option-1" class="option option-1">
+                                    <div class="dot"><img src="./assets/images/cbse.png"></div>
+                                    <span>EAMCET</span>
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <input type="radio" ng-model="x.stdgroup" value="JEE MAINS" name="stdgroup" id="option-2">
+                                <label for="option-2" class="option option-2">
+                                    <div class="dot"><img src="./assets/images/cbse.png"></div>
+                                    <span>JEE MAIN</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="radio" ng-model="x.stdgroup" value="JEE ADV" name="stdgroup" id="option-3">
+                            
+                                <label for="option-3" class="option option-3">
+                                    <div class="dot"><img src="./assets/images/cbse.png"></div>
+                                    <span>JEE ADV</span>
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <input type="radio" ng-model="x.stdgroup" value="NEET" name="stdgroup" id="option-4">
+                                <label for="option-4" class="option option-4">
+                                    <div class="dot"><img src="./assets/images/cbse.png"></div>
+                                    <span>NEET</span>
+                                </label>
+                            </div>
+                        </div> 
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label></label>
+                                <div class="form-group">
+                                    <select id="board" name="board" tabindex="5" ng-model="x.board" ng-init="x.board=''" class="form-control" required autocomplete="off"> 
+                                        <option value=""> Select </option>
+                                        <option value="STATEBOARD"> StateBoard </option>
+                                        <option value="CBSE"> CBSE </option>
+                                        <option value="ICSE"> ICSE </option> 
+                                    </select>
+                                    <label for="board">Board of study<span class="text-danger">*</span></label>
+                                </div>  
+                            </div>
+                            <div class="col-md-6"> 
+                                <label></label>
+                                <div class="form-group">
+                                    <select type="text" id="year" tabindex="6" name="year" ng-model="x.year" ng-init="x.year=''" class="form-control" required autocomplete="off"> 
+                                     <option value=""> Select </option>
+                                        <option value="2022-2023"> 2022-23 </option>
+                                        <option value="2023-24"> 2023-24 </option>
+                                        <option value="2024-25"> 2024-25 </option> 
+                                    </select>
+                                    <label for="year">Exam appearing for the Year<span class="text-danger">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+                            <h6 class="text-danger text-center">{{msgerror}}</h6>
+                           <button type="submit" class="btn btn-warning rounded-pill shadow btn-block mt-4">JOIN</button>
+                           <h5  style="cursor: pointer;" class="haveacc" ng-click="signinpage()" >I already have an account</h5>
+                   </div>
+                        <!-- <button type="submit" class="btn btn-success rounded-pill">Get OTP</button> -->
+                        
+                    </div>
+                   
+               </div>
+               </div>
+                   
+           </form>       
+            <!-- JOIN OTP -->
+        <form class="regoform" ng-submit="joinotpverify(x)">
+            <div class="modal fade" id="OTPModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="margin-right: 40px;">
+
+                         <div class="float-right mr-4 mt-4">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>
+                        <div class="modal-body">
+                        
+                            <h4 class="title mb-4">Enter <span class="modal-title">OTP</span></h4>
+                            <div class="form-group">
+                                <input type="text" id="mobileotp" name="mobileotp" ng-model="x.mobileotp" class="form-control " pattern="[0-9\s]+"
+                                maxlength="4" minlength="4" required autocomplete="off">
+                                <label for="mobileotp">OTP</label>
+                            </div>
+                            
+                            <a href="#" style="font-size: 14px; color: #555555; float: right; margin-top: -20px; margin-bottom: 20px;" ng-click="joinresendotp()" ng-if="countDown<=0"> Resend OTP </a>
+                            
+                            <h5 class="text-danger">{{invalidotp}}</h5>
+                            <div style="clear: both;"></div>
+                            <h3 class="timer" ng-show="countDown>0">00:{{countDown}}</h3>
+                            <button type="submit" class="btn btn-warning rounded-pill shadow btn-block mt-4">Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>    
+        <!-- Login OTP -->
+        <div class="regoform">
+            <form  ng-submit="Loginotpsubmit(mobileotp)">
+            <div class="modal fade" id="LoginOTPModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="margin-right: 40px;">
+
+                        <div class="float-right mr-4 mt-4">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                     </button>
+                     </div>
+                        <div class="modal-body">
+                        
+                            <h4 class="title mb-4">Enter <span class="modal-title">OTP</span></h4>
+                            <div class="form-group">
+                                <input type="text" id="mobileotp" name="mobileotp" ng-model="mobileotp" class="form-control " pattern="[0-9\s]+"
+                                maxlength="4" minlength="4" required autocomplete="off">
+                                <label for="mobileotp">OTP</label>
+                            </div>
+                            
+                            <a href="#" style="font-size: 14px; color: #555555; float: right; margin-top: -20px; margin-bottom: 20px;" ng-click="loginresendotp()" ng-show="countDown<=0"> Resend OTP </a>
+                            
+                            <h5 class="text-danger"> {{invalidotp}}</h5>
+                            <div style="clear: both;"></div>
+                            <h3 class="timer"  ng-if="countDown>0">00:{{countDown}}</h3>
+                           <button type="submit" class="btn btn-warning rounded-pill shadow btn-block mt-4">Login</button>
+                    
+                    
+            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>   
+
+  
+
+    <script src="./assets/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="./assets/js/popper.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
+    <script src="./assets/js/jquery.validate.min.js"> </script>
+    <script src="./assets/js/jquery-validate.bootstrap-tooltip.min.js"></script> 
+    <script src="./assets/js/validation.js"> </script>
+    
+ </body>
+</html>

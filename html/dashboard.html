@@ -1,0 +1,870 @@
+<div class="maindiv" ng-app="AbhyasApp" ng-controller="Dashboard">
+    <form>
+        <div class="row " ng-init="getbasicdata()">
+            <div class="col-md-12 ">
+                <div class="d-flex justify-content-between bg-white shadow p-2 mb-2 rounded">
+
+                    <aside class="flex-grow-1 align-self-center">
+                        <!-- <input type="text" class="w-100 topSearchInput" > -->
+                        <input type="text" id="form1" class="form-control border-0" ng-model="searchkeyword"
+                            autocomplete="off" placeholder="Search Topic Name..." />
+                    </aside>
+                    <aside class="align-self-center">
+                        <div class="position-relative">
+                            <button class="btn btn-white" ng-click="searchTopic(progid,searchkeyword)"> <i
+                                    class="fa fa-search fa-lg" style="color: #FD9A10;" aria-hidden="true"></i></button>
+
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row mb-2">
+        <div class="col-lg-3 d-none d-lg-block mt-1">
+            <div class="card profile-card-2 rounded shadow" style="height: 500px;">
+                
+                    <img class="img-fluid" src="assets/images/usercover.jpg" alt="Card image cap">
+                <div class="card-body pt-5 mr-4">
+                    <div class="course_details col-12">
+                        <table class="table table-borderless table-sm w-100 font2 wt1 text-dark">
+                            <tr>
+                                <td class="text-muted">Mobile</td>
+                                <td class="text-lowercase">{{userdata.stdMobileNo}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">College</td>
+                                <td>{{userdata.stdCollege}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">City</td>
+                                <td>{{userdata.stdCity}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">
+                                    Enrolled in
+                                </td>
+                                <td>
+                                    <span class="course btn btn-outline-dark btn-sm rounded"><img
+                                        src="assets/images/cbse.png" style="width: 15px;margin-top: -5px;"> {{userdata.stdCourse}}</span>
+                                </td>
+                            </tr>
+                           
+                        </table>
+                       
+                        
+                    </div>
+                  
+                    
+                    <img src="assets/images/undraw_male_avatar_323b.svg" alt="profile-image" class="profile"/><br>
+                    
+                    <div class="card-title font4 wt1 text-dark" style="margin-top: 70px !important;"> {{userdata.stdName}} </div>
+                    
+                </div>
+                <div class="card-footer text-center bg-white">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="icon-block">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+
+        </div>
+        <div class="col-lg-3 col-md-6 mt-1">
+            
+            <div class="card shadow rounded" style="height: 500px;">
+                
+                        <img src="assets/images/quote.jpeg" class="card-img-top" alt="...">
+                       
+                    <div class="card-body mb-0 pb-0">
+                
+                               
+                                <table class="w-100">
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="float-left">
+                                                <h6 class="font2 wt1 text-muted" style="margin-bottom: -5px !important;">
+                                                    Questions</h6>
+                                                <div class="color-orange wt4 h2">{{allsubjectinfo.questionCount}}</div>
+                                            </div>
+                                           
+                                          
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="font2 wk1 mt-0 mb-2">
+                                                <span class="text-muted">Question Levels </span><br/>
+                                                <span class="mr-4 font2 wt1"><img src="./assets/icons/easy.png" width="12px">&nbsp;&nbsp;Easy</span>
+                                                <span class="mr-4 font2 wt1"><img src="./assets/icons/average.png" width="12px">&nbsp;&nbsp;Average</span>
+                                                <span class="font2 wt1"><img src="./assets/icons/difficult.png" width="12px">&nbsp;&nbsp;Difficult</span>
+                                        
+                                        </td>
+                                    </tr>
+                                   
+                                    
+                                  
+                                    <tr>
+                                        <td colspan="4" class="font2 text-muted wt1 pt-2">
+                                          <div class="mb-1"></div>
+                                         Model Questions for
+                                        </td>
+                                    </tr>
+                                    <tr class="text-dark font2 wt1">
+                                        <td>
+                                            <p class="font2 wt1"><img
+                                                src="assets/images/cbse.png"
+                                                style="width: 16px;margin-top: -5px;"> JEE Main & Adv</p>
+                                        </td>
+                                        <td>
+                                   <p class="font2 wt1"><img
+                                                src="assets/images/cbse.png"
+                                                style="width: 16px;margin-top: -5px;"> NEET</p>
+                                        </td>
+                                        
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <h6 class="font2 wt1 text-muted" style="margin-bottom: -5px !important;">
+                                                Conceptual Videos</h6>
+                                            <div class="color-orange wt4 font4">{{allsubjectinfo.videoCount}}<small> Mins</small></div>
+                                        </td>
+                                        <td>
+                                            <h6 class="font2 wt1 text-muted" style="margin-bottom: -5px !important;">
+                                                Happy Students</h6>
+                                            <div class="color-orange wt4 font4">53,345</div>
+                                        </td>
+                                    </tr>
+                                    
+                                </table>
+                               
+                                
+                               
+
+                               
+              
+                    </div>
+               
+               
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row mt-4" ng-show="form ==1">
+
+                <div class="col-md-12">
+                    <div class="mb-4 ml-2" ng-show="subjectlist.length>0">SUBJECTS
+                        <span style="float: right;cursor: pointer; width: 30%;"> <input type="text"
+                                ng-model="searchsubject" placeholder="Search Subject...!"
+                                class="form-control form-control-sm"> </span>
+
+                    </div>
+                   
+                    <div class="swiper mySwiper mt-0 pt-0">
+                        <div class="swiper-wrapper  mb-0 pb-0">
+                            <div class="swiper-slide subjectslide" ng-repeat="x in subjectlist | filter:searchsubject">
+
+                                <div class="scrollerstrip">
+                                    <a href ng-click="getSubjectWiseTopics(x.subjectName)">
+                                        <img src="./assets/images/{{x.subjectName | lowercase}}.png" class="subjectimg">
+
+
+
+                                        <!-- <span> {{subjectname}} </span> -->
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="h5 wt4 color-orange ">{{x.subjectName | lowercase}}</div>
+                                                <table class="w-100 heading2">
+                                                    <tr>
+                                                        <td width="100%">
+
+                                                        </td>
+                                                        <!--<td>
+    <div class="progress zoom blue float-right" ng-if="x.videoCount>0">
+    <span class="progress-left">
+    <span class="progress-bar"></span>
+    </span>
+    <span class="progress-right">
+    <span class="progress-bar"></span>
+    </span>
+    <div class="progress-value">{{(x.videoCount/500)*100 |number:0}}%</div>
+    </div>
+    </td>-->
+                                                    </tr>
+                                                </table>
+
+
+                                                <table class="w-100 text-dark">
+                                                    <tr>
+                                                        <td width="30px"
+                                                            style="vertical-align:text-top;text-align:left;">
+                                                            <img src="./assets/icons/video.png" width="20px"
+                                                                alt="Videos" title="Videos">
+                                                        </td>
+                                                        <td>
+                                                            <label> {{x.videoCount}} </label>
+                                                        </td>
+                                                        <td width="30px"
+                                                            style="vertical-align:text-top;text-align:left;">
+                                                            <img src="./assets/icons/easy.png" width="15px"
+                                                                alt="Easy Questions" title="Easy Questions">
+                                                        </td>
+                                                        <td>
+                                                            <label> {{x.easy}} </label>
+                                                        </td>
+
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td style="vertical-align:text-top;text-align:left;">
+
+                                                            <img src="./assets/icons/q.png" width="15px" alt="Questions"
+                                                                title="Questions">
+                                                        </td>
+                                                        <td>
+                                                            <label>{{x.questionCount}} </label>
+                                                        </td>
+
+                                                        <td style="vertical-align:text-top;text-align:left;">
+                                                            <img src="./assets/icons/average.png" width="15px"
+                                                                alt="Average Questions" title="Average Questions">
+                                                        </td>
+                                                        <td>
+                                                            <label> {{x.average}} </label>
+                                                        </td>
+
+
+
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td style="vertical-align:text-top;text-align:left;">
+                                                            <img src="./assets/icons/book.png" width="15px"
+                                                                alt="Chapters" title="Chapters">
+                                                        </td>
+                                                        <td>
+                                                            <label>{{x.topicCount}} </label>
+                                                        </td>
+
+                                                        <td style="vertical-align:text-top;text-align:left;">
+                                                            <img src="./assets/icons/difficult.png" width="15px"
+                                                                alt="Hard Questions" title="Hard Questions">
+                                                        </td>
+                                                        <td>
+                                                            <label> {{x.difficult}} </label>
+                                                        </td>
+
+
+
+                                                    </tr>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!-- <div class="swiper-pagination"></div> -->
+                    </div>
+                    <div align="center" ng-show="loadstatus==true">
+                        <img src="abhyasbeta/assets/Preloader.gif" class="img-fluid"
+                            style="height: 100px; width: 100px; border-radius: 100%" alt="Loading. Please wait." />
+                    </div>
+
+
+                    <!-- topics swipper -->
+                    <div class="mt-4 mb-4 ml-2" ng-show="topicslist.length>0">TOPICS
+                        <span style="float: right;cursor: pointer; width: 30%;"> <input type="text"
+                                ng-model="searchtopic" placeholder="Search Here...!"
+                                class="form-control form-control-sm"> </span>
+
+                    </div>
+                    <div class="swiper mySwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide subjectslide"
+                                ng-repeat="x in topicslist | orderBy : 'topicId' | filter:searchtopic">
+
+                                <div class="scrollerstrip-full p-0">
+                                    <div class="card ">
+                                        <div class="card-header bg-white">
+                                            <div class="h6 mt-0 mb-0 wt4 color-orange ">{{x.subjectName | lowercase}}
+                                            </div>
+                                            <div class="mb-0 heading2 ">{{x.topicName | lowercase}}</div>
+                                        </div>
+                                        <div class="card-body mt-0 mb-0">
+                                            <div class="row">
+
+                                                <div class="col-12">
+                                                    <!-- <table class="w-100">
+    <tr>
+    <td width="80%">
+    <div class="subjectname">{{x.subjectName | lowercase}}</div>
+    <div class="topicname"> {{x.topicName |lowercase}}</div>
+    </td>
+    <td>
+    <div class="progress zoom blue float-right mb-4" ng-if="x.videoCount>0">
+    <span class="progress-left">
+    <span class="progress-bar"></span>
+    </span>
+    <span class="progress-right">
+    <span class="progress-bar"></span>
+    </span>
+    <div class="progress-value">{{x.videoCount}}%</div>
+    </div>
+    </td>
+    </tr>
+    </table>-->
+
+                                                    <table class="w-100 font2"
+                                                        style="text-align: center;line-height: 5px;">
+                                                        <tr>
+                                                            <td ng-if="x.videoCount>0">
+                                                                <label> {{x.videoCount}}</label>
+                                                            </td>
+                                                            <td ng-show="x.questionCount>0">
+                                                                <label> {{x.questionCount}} </label>
+                                                            </td>
+                                                            <td ng-show="x.easy>0">
+                                                                <label> {{x.easy}} </label>
+                                                            </td>
+                                                            <td ng-show="x.average>0">
+                                                                <label>{{x.average}} </label>
+                                                            </td>
+                                                            <td ng-show="x.difficult>0">
+                                                                <label>{{x.difficult}} </label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td ng-show="x.videoCount>0">
+                                                                <img src="./assets/icons/video.png" width="20px"
+                                                                    alt="Videos" title="Videos">
+                                                            </td>
+                                                            <td ng-show="x.questionCount>0">
+
+                                                                <img src="./assets/icons/q.png" width="15px"
+                                                                    data-toggle="tooltip" data-placement="top"
+                                                                    title="Questions">
+                                                            </td>
+                                                            <td ng-show="x.easy>0">
+
+                                                                <img src="./assets/icons/easy.png" width="15px"
+                                                                    alt="Easy Questions" title="Easy Questions">
+                                                            </td>
+                                                            <td ng-show="x.average>0">
+
+                                                                <img src="./assets/icons/average.png" width="15px"
+                                                                    alt="Average Questions" title="Average Questions">
+                                                            </td>
+
+                                                            <td ng-show="x.difficult>0">
+
+                                                                <img src="./assets/icons/difficult.png" width="15px"
+                                                                    alt="Hard Questions" title="Hard Questions">
+                                                            </td>
+
+                                                        </tr>
+                                                    </table>
+
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="card-footer bgcolor-orange p-1">
+                                            <table class="w-100" style="text-align: center;">
+                                                <tr>
+                                                    <td ng-show="x.videoCount>0">
+                                                        <a href ng-click="show_videos(x)"><img class="zoom"
+                                                                src="./assets/icons/video-w.png" width="30px"></a>
+
+                                                    </td>
+                                                    <td>
+                                                    <td>
+                                                        <a href="" ng-click="show_practice_exam(x)"><img class="zoom"
+                                                                src="./assets/icons/exam-w.png" width="30px"></a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="" ng-click="show_ask_question(x)"><img class="zoom"
+                                                                src="./assets/icons/ask-w.png" width="30px"></a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6 mt-3 rounded-pill container-fluid" ng-show="topicslist.length==0">
+                                <div class="row">
+                                    <div class="col-md-6 ">
+                                        <img class="img-responsive" src="./assets/images/notfound.jpg">
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+
+
+                        </div>
+                        <!-- <div class="swiper-pagination"></div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-6" ng-show="formname=='qr' && resultjson[0].FinalResult.totalquestions>0">
+            <div class="mt-2 mb-2 ml-2">STUDY TRACKER </div>
+            <div class="card card-body shadow pb-2 rounded" >
+                <div class="row">
+                    <div class="col-md-6 mb-4" >
+                        <div class="m-2">
+                            Today's Study
+                            </div>
+                            <img class="w-100 mt-4" src="https://quickchart.io/chart?c={type:'doughnut',data:{labels:['Video','Practice Text','Assignment'],datasets:[{data:[{{videoimespent}},{{practiceimespent}},{{assignimespent}}]}]},options:{plugins:{datalabels:{color:'white',font:{size:20}},doughnutlabel:{labels:[{text:'{{totaltimespent}} mins',font:{size:20}},{text:'total'}]}}}}">
+                      
+                    </div>
+                <div class="col-md-6" style="height: 410px; overflow: scroll;">
+                <table class="table font2 wt2 w-100">
+                    
+                    <tbody>
+                        <tr ng-repeat="x in studytracker | orderBy:'-' | limitTo : 10" ng-if="x.eventCategory=='Video' ||x.eventCategory=='Ask Me' ||x.eventCategory=='PracticeExam' ||x.eventCategory=='Assignment'">
+                            <td width="20px">
+                                <img class="zoom bgcolor-orange p-2 rounded shadow"  src="./assets/icons/video-w.png" width="40px" ng-if="x.eventCategory=='Video'">
+                                <img class="zoom bgcolor-blue p-2 rounded shadow" src="./assets/icons/ask-w.png" width="40px" ng-if="x.eventCategory=='Ask Me'">
+                                <img class="zoom bgcolor-green p-2 rounded shadow" src="./assets/icons/exam-w.png" width="40px" ng-if="x.eventCategory=='PracticeExam'">
+                                <i class ="fa fa-desktop fa-lg mr-2 text-white bgcolor-yellow p-2 rounded shadow" ng-if="x.eventCategory=='Assignment'"></i>
+                            </td>
+                            <td>
+                                <p class="font1 wt1 mt-0 mb-0 text-dark"> {{x.eventCategory}} <span class="float-right"><i class="fa fa-clock-o"></i> {{x.created | date:'dd-MM-yy @ h:mma'}}</span></p>
+                                <div class="font2 wt4 color-orange">
+                                    
+                                    {{x.title1}}
+                                    <br/></div>
+                                
+        
+                                <div >{{x.title2}} <span class="float-right badge badge-success p-1" ng-if="x.result">{{x.result | number:0}}%</span></div>
+                               
+                            </td>
+                        </tr>                                                                  
+                    </tbody>
+                </table>
+                </div>
+                  
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" ng-show="formname=='qr' && resultjson[0].FinalResult.totalquestions>0">
+            <div class="mt-2 ml-2" ng-show="resultjson.length">LAST PRACTICE TEST RESULT
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <div class="cstm_card shadow rounded d-flex" style="min-height: 200px;">
+                        <aside class="sidebar bgcolor{{resultjson[0].FinalResult.bgcolor}} mr-3">
+                            <div class="vertical-text text-white ml-1 h5 wt4">{{resultjson[0].Subjectname}}</div>
+                        </aside>
+                        <section class="d-flex justify-content-between w-100" style="flex-direction: column;">
+                            <div class="d-flex justify-content-between">
+                                <div class="pt-0">
+                                    <a href="#"
+                                        class="bgcolor{{resultjson[0].FinalResult.bgcolor}} font2 wt1 btn text-white text-uppercase sbt mt-4">{{resultjson[0].FinalResult.feedback}}</a>
+                                    <p class="font4 wt1 pt-2 heading2">
+                                        {{resultjson[0].TopicsArr[0].Topicname |lowercase}}</p>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <table class="w-100 table table-sm mb-2 font2 text-muted">
+                                        <tr>
+                                            <td class="w-60">
+                                                <span class="iconify text-dark" data-icon="charm:square-tick"
+                                                    data-width="20"></span>
+                                                Marks
+                                            </td>
+                                            <td style="color: #000">
+                                                {{resultjson[0].FinalResult.totalcorrect}} /
+                                                {{resultjson[0].FinalResult.totalquestions}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="iconify text-dark" data-icon="mdi:percent-box-outline"
+                                                    data-width="20"></span>
+                                                Percentage
+                                            </td>
+                                            <td style="color: #000;">
+                                                {{resultjson[0].FinalResult.totalcorrect/resultjson[0].FinalResult.totalquestions *100}}%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="iconify text-dark" data-icon="ant-design:calendar-outlined"
+                                                    data-width="20"></span>
+                                                Date
+                                            </td>
+                                            <td style="color: #000">
+                                                {{resultjson[0].FinalResult.attemptdate | date}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="iconify text-dark" data-icon="bx:time-five"
+                                                    data-width="20"></span>
+                                                Duration
+                                            </td>
+                                            <td style="color: #000">
+                                                {{resultjson[0].FinalResult.timespend | number:2}}/{{Resobj.examtime}}
+                                                Mins
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-60">
+                                                <span class="iconify text-dark" data-icon="akar-icons:check-box"
+                                                    data-width="20"></span>
+                                                Attempted
+                                            </td>
+                                            <td style="color: #000">
+                                                {{resultjson[0].FinalResult.totalattempted}}/{{resultjson[0].FinalResult.totalquestions}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="iconify text-success" data-icon="akar-icons:check-box"
+                                                    data-width="20"></span>
+                                                Correct
+                                            </td>
+                                            <td style="color: #000">
+                                                {{resultjson[0].FinalResult.totalcorrect}}/{{resultjson[0].FinalResult.totalquestions}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="iconify text-danger ml-1" data-icon="bi:x-square"
+                                                    data-width="15"></span>
+                                                Wrong
+                                            </td>
+                                            <td style="color: #000">
+                                                {{resultjson[0].FinalResult.totalwrong}}/{{resultjson[0].FinalResult.totalquestions}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="iconify text-warning"
+                                                    data-icon="fluent:checkbox-unchecked-16-filled"
+                                                    data-width="30"></span>
+                                                Left
+                                            </td>
+                                            <td style="color: #000">
+                                                {{resultjson[0].FinalResult.totalleft}}/{{resultjson[0].FinalResult.totalquestions}}
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <img src="https://quickchart.io/chart?width=500&height=300&c={type:'bar',data:{labels:['Questions'],datasets:[{label:'Correct',data:[{{resultjson[0].FinalResult.totalcorrect}}]}, {label:'Wrong',data:[{{resultjson[0].FinalResult.totalwrong}}]},{label:'Left',data:[{{resultjson[0].FinalResult.totalleft}}]}  ]}}"
+                                        width="90%" height="80%">
+                                </div>
+                            </div>
+
+                            <div>
+                                <hr class="mt-0 mb-0" />
+                                <span class="float-left">
+                                    <h6 class="font2 wt1 mb-0 text-muted">Impression</h6>
+                                    <div class="color{{resultjson[0].FinalResult.bgcolor}} font4 wt2 pb-1">
+                                        {{resultjson[0].FinalResult.comment}}</div>
+                                </span>
+                                <div class="float-right mt-3 mr-3 row text-muted">
+
+
+                                    <span class="iconify mr-3 zoom" data-icon="ant-design:share-alt-outlined"
+                                        data-width="25"></span>
+
+
+
+                                    <span class="iconify mr-3 zoom" data-icon="bi:card-list" data-toggle="collapse"
+                                        href="#collapseExample"  role="button" aria-expanded="false"
+                                        aria-controls="collapseExample" data-width="25"></span>
+
+
+                                    <span class="iconify zoom" data-icon="ic:outline-file-download"
+                                        data-width="25"></span>
+
+
+
+
+
+                                </div>
+
+
+                            </div>
+                        </section>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+       
+
+    </div>
+
+    <div class="collapse" id="collapseExample">
+
+        <div class="row mb-2" ng-repeat='x in resultjson[0].Questions'>
+            <div class="col-md-12">
+
+                <div class="card card-body shadow rounded text-muted">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <ul class="list-group">
+                                <li class="list-group-item text-left">
+                                    <i class="fa fa-quora fa"></i> {{$index+1}}/{{resultjson[0].Questions.length}}
+
+                                    <span class="badge badge-warning float-right" ng-show="x.time_spent>0"><i
+                                            class="fa fa-clock-o fa-lg font2 m-1"> {{x.time_spent}}</i> </span>
+                                </li>
+                                <li class="list-group-item text-left">
+
+                                    <table class="w-100 mb-2">
+                                        <tr>
+
+                                            <td class="text-left" ng-init="qlevel=x.question_master_level_id">
+                                                <span ng-if="qlevel<2"
+                                                    class="btn btn-outline-success btn-sm rounded text-dark"><img
+                                                        src="assets/icons/easy.png"
+                                                        style="width: 12px;margin-top: -5px; margin-right: 10px; font-size: 8px !important;">
+                                                    EASY</span>
+                                                <span ng-if="qlevel==2"
+                                                    class="btn btn-outline-warning btn-sm rounded text-dark"><img
+                                                        src="assets/icons/average.png"
+                                                        style="width: 12px;margin-top: -5px;"> AVERAGE</span>
+                                                <span ng-if="qlevel==3"
+                                                    class="btn btn-outline-danger btn-sm rounded text-dark"><img
+                                                        src="assets/icons/difficult.png"
+                                                        style="width: 12px;margin-top: -5px;"> DEFCULT</span>
+                                            </td>
+                                            <td>
+                                                <span class="btn btn-outline-dark btn-sm rounded float-right"><img
+                                                        src="assets/images/cbse.png"
+                                                        style="width: 15px;margin-top: -5px;"> JEEMAIN 2022</span>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    <span data-ng-init="UpdateMathJax()">
+                                        <p>{{x.question_master_desc}}</p>
+                                    </span>
+
+                                </li>
+
+                                <li class="list-group-item" ng-repeat='y in x.ans'>
+                                    <span data-ng-init="UpdateMathJax()">
+                                        <p>{{y.answer_master_desc}}</p>
+                                    </span>
+                                    <span class="fa-stack text-success float-right">
+
+                                        <i ng-if="y.my_answer ==undefined && y.answer_master_isright == '1'"
+                                            class="fa fa-check text-success"></i>
+                                        <i ng-if="y.my_answer =='0' && y.answer_master_isright == '1'"
+                                            class="fa fa-check text-success"></i>
+                                        <i ng-if="y.my_answer =='1' && y.answer_master_isright == '0'"
+                                            class="fa fa-times text-danger"></i>
+                                        <span ng-if="y.my_answer=='1' && y.answer_master_isright == '1'"
+                                            class="fa-stack text-success">
+                                            <i class="fa fa-check text-success"></i><i class="fa fa-check text-success"
+                                                style="margin-left:-7px"></i>
+                                        </span>
+
+                                    </span>
+                                </li>
+
+
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <ul class="list-group font2">
+                                <li class="list-group-item text-left">
+                                    <img src="assets/images/solution.jpeg" style="zoom: 25% !important;" >
+                                   <img src="assets/images/verify.png" class="float-right p-0" style="zoom: 60%;" > 
+                                </li>
+                                <li class="list-group-item"> <p >You can find the hints or solutions for this question here.</p></li>
+                                <li class="list-group-item text-left">
+                                    <div class="media">
+                                        <img src="https://img.youtube.com/vi/{{practiceexamvideoimg}}/maxresdefault.jpg"
+                                            class="w-25 mr-3" alt="..." ng-click="show_practicevideos(practicevideostopic)">
+                                        <div class="media-body">
+                                            <button
+                                                class="mt-0 mb-2 btn btn-outline-success btn-sm rounded  black-color-90">
+                                                VIDEO EXPLANATION</button>
+                                            <br />
+                                            <p>Related video resouces for better understanding.</p>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-6 mb-4">
+             <!-- Video swipper -->
+             <div class="row ml-2" ng-show="userlastsession.length>0">CONTINUE LAST LESSON</div>
+             <div class="swiper mySwiper mt-2 ml-2">
+                 <div class="swiper-wrapper">
+                     <div class="swiper-slide subjectslide" ng-repeat="x in userlastsession | orderBy: '-'">
+ 
+                         <div class="card mr-2 shadow rounded ">
+                             <img src="https://img.youtube.com/vi/{{x.eventDetails[0].videoid}}/maxresdefault.jpg"
+                                 class="img-fluid thumbnail rounded" ng-show="idxvalue!=$index"
+                                 ng-click="playSeenVideo($index,x.eventDetails)">
+ 
+                             <iframe ng-show="idxvalue==$index" class="img-fluid thumbnail" src="{{playseenvideourl}}"
+                                 frameborder="0"
+                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                 allowfullscreen></iframe>
+                             <p class="font3 ml-3 mb-0 color-orange text-uppercase">
+                                 {{x.eventDetails[0].subject_master_name | lowercase}}</p>
+                             <p class="font2 ml-3 mt-0 text-muted text-uppercase">{{x.eventDetails[0].title |lowercase}}
+                             </p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             </div>
+             <div class="col-md-6 mb-4">
+            <!-- Performance Card-->
+            <div class="ml-2" ng-show="practicetestresult.length>0">PRACTICE EXAM RESULTS
+                <span style="float: right;cursor: pointer; width: 30%; margin-right: -15px;"> <input type="text"
+                        ng-model="searchtopicexam" placeholder="Search Here...!" class="form-control form-control-sm">
+                </span>
+
+            </div>
+
+            <div class="row mt-2 ml-1">
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide subjectslide"
+                            ng-repeat="x in practicetestresult | orderBy : '-time' | filter:searchtopicexam"
+                            ng-show="x.summary.percentage>=0">
+                            <div class="cstm_card d-flex">
+                                <aside class="sidebar bgcolor{{x.bgcolor | lowercase}} mr-3">
+                                    <div class="vertical-text h5">{{x.Subjectname}}</div>
+                                </aside>
+                                <section class="d-flex justify-content-between w-100" style="flex-direction: column;">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="pt-3">
+                                            <a href="#"
+                                                class="bgcolor{{x.bgcolor | lowercase}} text-white mt-2 p-1 font1 rounded">{{x.feedback}}</a>
+                                            <h2 class="font2 wt3 mt-1">{{x.summary.Topics.Topicname}}</h2>
+                                        </div>
+                                        <img ng-show="x.feedback=='STRONG IN'" src="assets/images/image.png"
+                                            class="pr-4 float-right" width="90px" height="70px">
+
+                                    </div>
+                                    <ul class="d-flex justify-content-between pl-0 flex-column font2 pt-1">
+                                        <li class="d-flex justify-content-between w-100"><span
+                                                class="text-muted">Problem
+                                                Type</span><span
+                                                class="pr-3">{{x.Questions[0].question_level_name}}</span></li>
+                                        <li class="d-flex justify-content-between w-100"><span class="text-muted">Solved
+                                                Problems</span><span class="pr-3">{{x.summary.percentage}}%</span></li>
+                                        <li class="d-flex justify-content-between w-100"><span
+                                                class="text-muted">Date</span><span
+                                                class="pr-3">{{x.time | date}}</span></li>
+                                    </ul>
+                                    <div>
+                                        <h6 class="font1 wt1 text-muted" style="margin-bottom: -5px !important;">
+                                            Impression</h6>
+                                        <div class="color{{x.bgcolor | lowercase}} wt4 font4 pb-2">{{x.comment}}</div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+
+            </div>
+           
+            <!-- Code paste here -->
+            
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-12 card">
+                <table class="table">
+                    <tr>
+                        <td>Sno</td>
+                        <td>TOPIC</td>
+                        <td>EAMCET</td>
+                        <td>JEEMAIN</td>
+                        <td>JEEADV</td>
+                        <td>NEET</td>
+                    </tr>
+                    <tr ng-repeat="x in subjectalltopicslist | orderBy: 'topicId'" ng-if="x.weightage[0].Nooftags>0 || x.weightage[1].Nooftags>0 || x.weightage[2].Nooftags>0 || x.weightage[3].Nooftags>0">
+                        <td>{{$index+1}}</td>
+                       <td>{{x.topicName}}</td>
+                       <td>{{x.weightage[0].Weightage}}</td>
+                       <td>{{x.weightage[1].Weightage}}</td>
+                       <td>{{x.weightage[2].Weightage}}</td>
+                       <td>{{x.weightage[3].Weightage}}</td> 
+                    </tr>
+                </table>
+                
+               
+    
+            </div>
+  
+        </div>
+        
+</div>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+</div>

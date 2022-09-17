@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="shortcut icon" href="assests/img/favicon.png"/>
+	<title>Admissiontest Report</title>
+	
+
+        <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet"> -->
+        <!-- <link href="https://cdn.datatables.net/1.12.0/css/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Scripts -->
+
+        <script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/1.12.0/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+
+        <!-- angular Script -->
+
+	<script src="https://abhyas.aditya.ac.in/jr/angularsupport/angular.min.js" type="text/javascript"></script>
+	<script src="https://abhyas.aditya.ac.in/jr/angularsupport/ngStorage.js"></script>
+	
+	<script type="text/javascript">
+		var app = angular.module("satadmissiontest", ['ngStorage']);
+
+ 
+		app.controller('report', function ($scope, $sce, $http, $filter, $window, $timeout) {
+      var baseurl = 'http://10.70.3.100:3002/';
+ $scope.groups=[{"course":'MPC'},{"course":'BIPC'}]
+$http.get(baseurl+'api/studentFinalResults?filter[fields][SelectedProgram]=true&filter[fields][centerId]=true&filter[fields][aadharNo]=true&filter[fields][course]=true&filter[fields][examCenterName]=true&filter[fields][groupPercentage]=true&filter[fields][dateTime]=true&filter[fields][stdName]=true&filter[fields][stdName]=true').success(function (data) {
+   // console.log(branchwisecount);
+     var branches= getUniqeElements(data,'examCenterName')
+    //console.log(branches);
+      branchwiseResult=data;
+      var mpc=branchwiseResult.filter(e=>e.course == 'MPC')
+      var bipc=branchwiseResult.filter(e=>e.course == 'BIPC')
+     // console.log(this.mpc);
+     // console.log(this.bipc);
+      for(var i=0;i<mpc.length;i++)
+      {
+        for(var j=0;j<mpc.length;j++)
+        {
+          if(mpc[i].aadharNo == mpc[j].aadharNo)
+          {
+            //console.log(this.branchwiseResult[i].aadharNo+'---'+this.branchwiseResult[j].aadharNo)
+            //console.log(this.branchwiseResult[i].groupPercentage+'"---"'+this.branchwiseResult[j].groupPercentage)
+            if(mpc[i].groupPercentage>mpc[j].groupPercentage)
+            {
+              //console.log(this.branchwiseResult[j].groupPercentage);
+               mpc[j].SelectedProgram='null'
+            }
+          }
+        }
+      }
+      for(var i=0;i<bipc.length;i++)
+      {
+        for(var j=0;j<bipc.length;j++)
+        {
+          if(bipc[i].aadharNo == bipc[j].aadharNo)
+          {
+            //console.log(this.branchwiseResult[i].aadharNo+'---'+this.branchwiseResult[j].aadharNo)
+            //console.log(this.branchwiseResult[i].groupPercentage+'"---"'+this.branchwiseResult[j].groupPercentage)
+            if(bipc[i].groupPercentage>bipc[j].groupPercentage)
+            {
+              //console.log(this.branchwiseResult[j].groupPercentage);
+               bipc[j].SelectedProgram='null'
+            }
+          }
+        }
+      }
+       Filterdbranchcount = mpc.concat(bipc);
+      //console.log(this.Filterdbranchcount);
+      var x=Filterdbranchcount.filter(e=>e.SelectedProgram != 'null');
+      //console.log(x);
+      this.Filterdbranchcount=x;
+      localStorage.setItem('BanchwiseList',JSON.stringify(Filterdbranchcount));
+
+       $scope.branchList=[];
+      if(branchwiseResult !=undefined)
+      {
+        branches.forEach(b => 
+          {
+            var x =branchwiseResult.filter(e=>e.examCenterName == b)
+             //console.log(x);
+             var ace=x.filter(e=>e.SelectedProgram == 'ACE')
+             var arije=x.filter(e=>e.SelectedProgram == 'ARIJE')
+             var arijeadv=x.filter(e=>e.SelectedProgram == 'ARIJE(ADV)')
+             var aream=x.filter(e=>e.SelectedProgram == 'AREAM')
+             var neet=x.filter(e=>e.SelectedProgram == 'NEET')
+             var aim=x.filter(e=>e.SelectedProgram == 'AIM')
+             var obj=
+             {  
+              "cid":x[0].centerId,"campusname":x[0].examCenterName,"ACE":ace.length,"ARIJE":arije.length,"ARIJEADV":arijeadv.length,"AREAM":aream.length,"NEET":neet.length,"AIM":aim.length
+             }
+            $scope.branchList.push(obj);
+          });
+      }
+       console.log($scope.branchList);
+       $window.localStorage.setItem('coursewisedata',JSON.stringify($scope.branchList));	
+	$scope.course_ACE= getSumElements($scope.branchList,'ACE')
+	 $scope.course_ARIJEADV=getSumElements($scope.branchList,'ARIJEADV')
+	 $scope.course_ARIJE=getSumElements($scope.branchList,'ARIJE')
+	 $scope.course_AREAM=getSumElements($scope.branchList,'AREAM')
+	 $scope.course_NEET=getSumElements($scope.branchList,'NEET')
+	 $scope.course_AIM=getSumElements($scope.branchList,'AIM')
+	 $scope.Grandtotal=getSumElements($scope.branchList,'ACE')+getSumElements($scope.branchList,'AIM')+getSumElements($scope.branchList,'NEET')+getSumElements($scope.branchList,'AREAM')+getSumElements($scope.branchList,'ARIJE')+getSumElements($scope.branchList,'ARIJEADV');
+	 console.log($scope.Grandtotal);
+	 $scope.getcoursedata('MPC');
+      // <!-- if(userdetails.userlevel != 1) -->
+      // <!-- { -->
+      //   <!-- var x =branchList.filter(e=>e.cid == userdetails.branchid); -->
+      //   <!-- branchList=x; -->
+      // <!-- } -->
+    })
+	
+	
+ 
+  
+  $scope.getcoursedata=function(c){
+  console.log(c);
+  $scope.selectedcourse=c;
+  $http.get(baseurl+'api/studentInfos/getrequired').success(function (resp) {
+  
+      $(document).ready(function () {
+				//table.destroy();
+				//$('#example').DataTable();
+				$('#example').dataTable( {
+				"aLengthMenu": [[100, 200, 300, -1], [100, 200, 300, "All"]],
+				"pageLength": 100
+
+				} );
+            });
+			
+			
+	console.log(resp);
+  var resdata=resp
+        var sdata=resdata.res;
+         var data=sdata.filter(e=>e.examStatus == 1)
+        for(var i=0;i<data.length;i++)
+        {
+          for(var j=0;j<data[i].studentFinalResults.length;j++)
+          {
+            data[i].SelectedProgram=data[i].studentFinalResults[j].SelectedProgram;
+            data[i].testwrittendate=data[i].studentFinalResults[j].dateTime;
+            this.summary=data[i].studentFinalResults[j].summary[0];
+            //console.log(this.summary);
+            var y =this.summary.filter(e=>e.SelectedProgram)
+            //console.log(y[0]);
+            data[i].grouppercent=y[0].P+'%';
+            data[i].grouppercent=parseInt(data[i].grouppercent);
+            data[i].examattemptedcourse=data[i].studentFinalResults[j].course
+          }
+        }
+         this.displaydata=false;
+         var x=data.filter(e=>e.examattemptedcourse == c)
+         data=x;
+        console.log(data)
+		$scope.finaldata=data;
+		
+ $scope.showform=function(aadhar){
+		$scope.curentaadhar=aadhar;
+		$scope.userdata={
+				_id:aadhar,
+				"comment":'',
+                "campus":'',
+                "reason":''
+		};
+ }
+$scope.updatestatus=function(user){
+$scope.msg='';
+console.log(user);
+$http.post(baseurl+'api/studentInfos/updatestatus',user).success(function (data) {
+console.log(data);
+var set=data.res;
+if(set.Remark==user.comment){
+$scope.msg='Success';
+}
+ 
+ 
+});	
+}
+		
+			
+        
+      
+ });
+
+  }
+ 
+ 
+function getUniqeElements(obj,field){
+	var elements=[];
+	for(var i in obj){
+	if(elements.indexOf(obj[i][field])==-1){
+	elements.push(obj[i][field]);
+	}
+	}
+	return elements;
+}
+function getSumElements(obj, field) {
+	//console.log(obj);
+	var total = 0;
+	for (var i in obj)
+		total += Number(obj[i][field]);
+	return total;
+}
+function sortByColumn(a, colIndex){
+
+a.sort(sortFunction);
+
+function sortFunction(a, b) {
+if (b[colIndex] === a[colIndex]) {
+	return 0;
+}
+else {
+	return (a[colIndex] > b[colIndex]) ? -1 : 1;
+}
+}
+
+return a;
+}
+		
+$scope.getStyle=function(rmk) 
+{
+ 
+  if(rmk == "J")
+   {
+    return " #ccffe6";
+   } else if(rmk == "NJ")
+   {
+    return "#ffcccc";
+   } else if(rmk == "NI")
+   {
+     return "#ffffcc"
+   }
+}
+  $scope.submit = function(courseid,name){
+    alert(courseid+name);
+    var obj={
+      "idc" : courseid,
+      "cname" :name
+    }
+    // localStorage.setItem('subbrabchstorage', JSON.stringify(obj));
+  }
+		});
+
+	</script>
+
+
+</head>
+
+<body ng-app="satadmissiontest" ng-controller="report">
+
+	<div class="mt-3 p-5">
+		<table  class="table table-striped table-bordered" style="width:100%">
+			<thead>
+					<tr bgcolor="#f4f4f4">
+                      <th colspan="8" class="text-center">COURSE WISE SELECTIONS</th>
+                    </tr>
+                    <tr class="text-right">
+                      <th class="text-left">Branch</th>
+                      <th>ACE</th>
+                      <th>ARIJE (ADV)</th>
+                      <th>ARIJE</th>
+                      <th>AREAM</th>
+                      <th>NEET</th>
+                      <th>AIM</th>
+                      <th>Total</th>
+                    </tr>
+			</thead>
+			 <tbody>
+                    <tr ng-repeat='x in branchList'>
+                      <td>{{x.campusname}}</td>
+                      <td align="right"><a href="subbranchreport.html?{{x.cid}}?ACE" target="_blank">{{x.ACE}}</a></td>
+                      <td align="right"><a href="subbranchreport.html?{{x.cid}}?ARIJE(ADV)" target="_blank">{{x.ARIJEADV}}</a></td>
+                      <td align="right"><a href="subbranchreport.html?{{x.cid}}?ARIJE" target="_blank">{{x.ARIJE}}</a></td>
+                      <td align="right"><a href="subbranchreport.html?{{x.cid}}?AREAM" target="_blank">{{x.AREAM}}</a></td>
+                      <td align="right"><a href="subbranchreport.html?{{x.cid}}?NEET" target="_blank">{{x.NEET}}</a></td>
+                      <td align="right"><a href="subbranchreport.html?{{x.cid}}?AIM" target="_blank">{{x.AIM}}</a></td>
+                      <td align="right"><a href="subbranchreport.html?{{x.cid}}?null" target="_blank">{{x.ACE+x.ARIJEADV+x.ARIJE+x.AREAM+x.NEET+x.AIM}}</a></td>
+                    </tr>
+                  </tbody> 
+				  <tfoot>
+                      <tr class="text-right">
+                          <th class="text-left">Total</th>
+                          <th><a href="subbranchreport.html?{{x.cid}}?ACE" target="_blank">{{course_ACE}}</a></th>
+                          <th><a href="subbranchreport.html?{{x.cid}}?ARIJE(ADV)" target="_blank">{{course_ARIJEADV}}</a></th>
+                          <th><a href="subbranchreport.html?{{x.cid}}?ARIJE" target="_blank">{{course_ARIJE}}</a></th>
+                          <th><a href="subbranchreport.html?{{x.cid}}?AREAM" target="_blank">{{course_AREAM}}</a></th>
+                          <th><a href="subbranchreport.html?{{x.cid}}?NEET" target="_blank" >{{course_NEET}}</a></th>
+                          <th><a href="subbranchreport.html?{{x.cid}}?AIM" target="_blank">{{course_AIM}}</a></th>
+                          <th><a href="subbranchreport.html?{{x.cid}}?null" target="_blank"> {{Grandtotal}}</a></th>
+                      </tr>
+                  </tfoot>
+		</table>
+	</div>
+
+
+   <div class="mt-3 pl-3">
+            <table id="example" class="table table-striped table-bordered table-sm" >
+                <thead>
+				<tr>
+				<td colspan="2" >Select Course</td>
+				<td colspan="3" >
+					<select name="SelectedCourse" class="form-control" id="exampleFormControlSelect1" ng-model="SelectedCourse" ng-change="getcoursedata(SelectedCourse);">					 
+						<option ng-repeat="x in groups" ng-selected="x.course==selectedcourse" value="{{x.course}}">{{x.course}}</option>
+					</select>
+				</td>
+				<td><span  style="color:green;"><b>{{msg}}</b></span></td>
+				<td colspan="6">&nbsp;</td>
+				</tr>
+                    <tr>
+						<th>#</th>
+                        <th>Name</th>
+                        <th>AadharNo</th>
+                        <th>Mobile</th>
+                        <th>School</th>
+                        <th>Address</th>
+						<th>Exam Attended Date</th>
+						<th>Campus</th>
+						<th>Group %</th>
+						<th>Selected</th>
+						<th>comment</th>
+						<th>Reason</th>						
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in finaldata">   
+						<td>{{$index+1}}</td>                    
+						<td>{{x.surName}} {{x.stdName}}</td>
+						<td   data-toggle="modal" data-target="#ExamSubmition" ng-click="showform(x.aadharNo);">{{x.aadharNo}}</td>
+						<td>{{x.mobileNo}}</td>
+						<td>{{x.prvSchool}}</td>
+						<td>{{x.street}}</td>
+						<td>{{x.testwrittendate | date:'d-M-y' }}</td>
+						<td *ngIf="xLevel == 1">{{x.examCenter}}</td>
+						<td><a [routerLink]="['result',x.aadharNo]" target="_blank">{{x.grouppercent}}</a></td>
+						<td><a [routerLink]="['result',x.aadharNo]" target="_blank">{{x.SelectedProgram | uppercase}}</a></td>
+						<td>{{x.Remark}}</td>
+						<td>{{x.Reason}}</td> 						
+                    
+ 
+
+  </tr>
+            </table>
+			<div class="modal fade" id="ExamSubmition" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+ <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update student Status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+		{{userdata | json}}
+		 <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Campus:</label>
+               <input type="text" class="form-control"  ng-model="userdata.campus" name="userdata.campus" value="user.campus"/> 
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Comment:</label>
+               <select ng-model="userdata.comment" class="form-control" name="userdata.comment" >
+			   <option value="">Add Comment</option>         
+                            <option>J</option>
+                            <option>NJ</option>
+                            <option>NI</option>
+							</select>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Reason:</label>
+            <textarea class="form-control" name="userdata.reason" ng-model="userdata.reason" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="updatestatus(userdata)">Send message</button>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>

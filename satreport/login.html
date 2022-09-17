@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AdmissionReport</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://abhyas.aditya.ac.in/jr/angularsupport/angular.min.js" type="text/javascript"></script>
+	<script src="https://abhyas.aditya.ac.in/jr/angularsupport/ngStorage.js"></script>
+
+
+  <script type="text/javascript">
+
+		var app = angular.module("satadmissiontest", ['ngStorage']);
+		app.controller('loginctrl', function ($scope, $sce, $http, $filter,$localStorage, $window, $timeout, $location) {
+      var baseurl = 'http://10.70.3.100:3002/';
+
+      $scope.login = function(x){
+        console.log(x);
+        
+        if(x.username=='admin' && x.password=='sat'){
+          $http.get(baseurl+'api/branchusers?filter=%7B%22where%22%3A%7B%20%22username%22%3A%20%22'+x.username+'%22%2C%22password%22%3A%20%22'+x.password+'%22%7D%7D').then(function(data){
+            $scope.details = data.data;
+            $window.localStorage.setItem('satuserdetails',JSON.stringify($scope.details));
+            console.log(data.data[0]);
+        });
+          // location.href = "~ram/satreport/satreport.html";
+        }
+        else{
+          $scope.errormsg = "Please Enter Valid Credintials";
+        }
+      }
+    });
+
+  </script>
+
+
+  <style>
+    html, body {
+      height:100% !important;
+    }
+    
+    .container {
+        height: 100%;
+        margin-top: 8%;
+    }
+    .card-header {background:#2196f3}
+    </style>
+</head>
+<body ng-app="satadmissiontest" ng-controller="loginctrl">
+<div class="container">
+    <div class="row h-100 justify-content-center">
+        <div class="col-md-5">
+          <div class="card">
+          <!-- Tabs Titles -->
+      
+          <!-- Icon -->
+          <div class="card-header p-2">
+            <img src="assets/logo2.png" alt="User Icon" class="img-fluid" />
+            
+          </div>
+          <h3 class="text-center pt-2">Login</h3>
+          <!-- Login Form -->
+          <form ng-Submit="login(user)" class="card-body">
+              <div class="form-group"> 
+                  <input ng-model="user.username" id="username" name="username" type="text" placeholder="Username" type="text" class="form-control"/> 
+              </div>
+              <div class="form-group"> 
+                  <input ng-model="user.password" type="password"  name="password" id="password" placeholder="Password" type="password" class="form-control"/> 
+              </div>
+              <p class="text-center" style="color:red">{{errormsg}}</p>
+              <div class="form-group"> 
+                  <button class="btn btn-primary btn-block btn-lg" type="submit" name="action">Login</button>
+              </div>
+              </form>
+      
+            </div>
+        </div>
+        </div>
+      </div>
+	  
+	    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
